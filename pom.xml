@@ -30,6 +30,7 @@
 		<kubernetes-user></kubernetes-user>
 		<coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 		<jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+		<jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -184,6 +185,13 @@
 				<configuration>
 					<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>jakarta.xml.bind</groupId>
+						<artifactId>jakarta.xml.bind-api</artifactId>
+						<version>${jakarta.xml.bind-api.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
