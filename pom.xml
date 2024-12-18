@@ -23,6 +23,12 @@
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
 		<lombok.version>1.18.36</lombok.version>
+		<certificate-authority-data></certificate-authority-data>
+		<cluster></cluster>
+		<client-certificate-data></client-certificate-data>
+		<client-key-data></client-key-data>
+		<kubernetes-user></kubernetes-user>
+		<coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -157,7 +163,14 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>${coveralls-maven-plugin.version}</version>
+				<configuration>
+					<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>
