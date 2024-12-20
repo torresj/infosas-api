@@ -112,7 +112,7 @@ public class StaffServiceIntegrationTest {
         //Given
         var entity = staffRepository.save(
                 StaffEntity.builder()
-                        .surname("surname")
+                        .surname("surnameIt")
                         .name("name")
                         .dni("dni")
                         .build()
