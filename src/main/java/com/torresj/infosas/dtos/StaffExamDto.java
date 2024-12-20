@@ -1,6 +1,6 @@
 package com.torresj.infosas.dtos;
 
-import com.torresj.infosas.enums.StaffType;
+import com.torresj.infosas.enums.StaffExamType;
 
-public record StaffExamDto(StaffType type, String shift, boolean provisional, float total, float op, float con, int position ) {
+public record StaffExamDto(StaffExamType type, String shift, boolean provisional, float total, float op, float con, int position ) {
 }

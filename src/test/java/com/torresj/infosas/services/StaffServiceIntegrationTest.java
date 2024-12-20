@@ -11,7 +11,7 @@ import com.torresj.infosas.entities.StaffJobBankEntity;
 import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
-import com.torresj.infosas.enums.StaffType;
+import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.repositories.StaffExamRepository;
 import com.torresj.infosas.repositories.StaffJobBankRepository;
 import com.torresj.infosas.repositories.StaffRepository;
@@ -28,7 +28,7 @@ import java.util.Set;
 import static com.torresj.infosas.enums.JobBankType.TCAE;
 import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_CRITICS;
 import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_DIALYSIS;
-import static com.torresj.infosas.enums.StaffType.NURSE;
+import static com.torresj.infosas.enums.StaffExamType.NURSE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
@@ -299,7 +299,7 @@ public class StaffServiceIntegrationTest {
         assertThat(enrichedStaffJobBankDto.staffJobBank().experience()).isEqualTo(staffJobBankEntity.getExperience());
     }
 
-    private StaffExamEntity givenStaffExam(Long staffId, StaffType type, boolean provisional) {
+    private StaffExamEntity givenStaffExam(Long staffId, StaffExamType type, boolean provisional) {
         return StaffExamEntity
                 .builder()
                 .staffId(staffId)

@@ -8,7 +8,7 @@ import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
-import com.torresj.infosas.enums.StaffType;
+import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.mappers.StaffMapper;
 import com.torresj.infosas.repositories.StaffExamRepository;
@@ -58,7 +58,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<EnrichedStaffExamDto> getEnrichedStaffExam(String surname, StaffType type) {
+    public List<EnrichedStaffExamDto> getEnrichedStaffExam(String surname, StaffExamType type) {
         return staffRepository.findAllBySurnameContainingIgnoreCase(surname, Limit.of(MAX_NUMBER_OF_STAFFS))
                 .stream()
                 .map(staff -> {

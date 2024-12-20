@@ -1,6 +1,6 @@
 package com.torresj.infosas.enums;
 
-public enum StaffType {
+public enum StaffExamType {
     NURSE,
     TCAE
 }

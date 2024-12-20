@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.torresj.infosas.enums.JobBankType.TCAE;
 import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_DIALYSIS;
-import static com.torresj.infosas.enums.StaffType.NURSE;
+import static com.torresj.infosas.enums.StaffExamType.NURSE;
 import static com.torresj.infosas.enums.Status.ADMITIDA;
 import static org.assertj.core.api.Assertions.assertThat;
 

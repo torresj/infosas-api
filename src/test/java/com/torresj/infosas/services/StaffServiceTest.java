@@ -4,7 +4,6 @@ import com.torresj.infosas.dtos.EnrichedSpecificStaffJobBankDto;
 import com.torresj.infosas.dtos.EnrichedStaffDto;
 import com.torresj.infosas.dtos.EnrichedStaffExamDto;
 import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
-import com.torresj.infosas.dtos.ExclusionReasonDto;
 import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.dtos.StaffExamDto;
 import com.torresj.infosas.dtos.StaffJobBankDto;
@@ -15,7 +14,7 @@ import com.torresj.infosas.entities.StaffJobBankEntity;
 import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
-import com.torresj.infosas.enums.StaffType;
+import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.mappers.StaffMapper;
 import com.torresj.infosas.repositories.StaffExamRepository;
@@ -37,7 +36,7 @@ import java.util.Set;
 import static com.torresj.infosas.enums.JobBankType.TCAE;
 import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_CRITICS;
 import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_DIALYSIS;
-import static com.torresj.infosas.enums.StaffType.NURSE;
+import static com.torresj.infosas.enums.StaffExamType.NURSE;
 import static com.torresj.infosas.enums.Status.ADMITIDA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -213,7 +212,7 @@ public class StaffServiceTest {
                 .build();
     }
 
-    private StaffExamEntity getStaffExamEntity(Long staffId, StaffType type, boolean provisional) {
+    private StaffExamEntity getStaffExamEntity(Long staffId, StaffExamType type, boolean provisional) {
         return StaffExamEntity
                 .builder()
                 .staffId(staffId)
