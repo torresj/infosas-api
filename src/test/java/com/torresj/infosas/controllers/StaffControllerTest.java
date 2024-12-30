@@ -1,6 +1,7 @@
 package com.torresj.infosas.controllers;
 
 import com.torresj.infosas.dtos.EnrichedStaffDto;
+import com.torresj.infosas.dtos.EnrichedStaffExamDto;
 import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.entities.StaffExamEntity;
@@ -206,5 +207,49 @@ public class StaffControllerTest {
         assertThat(result.staffSpecificJobBanks().stream().findFirst().get().others()).isEqualTo(staffSpecificJobBankEntity.getOthers());
         assertThat(result.staffSpecificJobBanks().stream().findFirst().get().total()).isEqualTo(staffSpecificJobBankEntity.getTotal());
         assertThat(result.staffSpecificJobBanks().stream().findFirst().get().exclusionReasons()).hasSize(1);
+    }
+
+    @Test
+    void givenStaffWithExamsWhenGetStaffBySurnameAndTypeThenReturnStaff(){
+        //Given
+        var staffEntity = staffRepository.save(
+                StaffEntity.builder()
+                        .name("Test")
+                        .surname("TestForExams")
+                        .dni("xxxxxxxxx")
+                        .build()
+        );
+
+        var staffExamEntity =  staffExamRepository.save(
+                StaffExamEntity.builder()
+                        .staffId(staffEntity.getId())
+                        .provisional(true)
+                        .type(StaffExamType.NURSE)
+                        .op(1)
+                        .shift("L")
+                        .total(3)
+                        .con(2)
+                        .position(100)
+                        .build()
+        );
+
+        String url = getBaseUri() + "/exams?filter=TestForExams&type=NURSE";
+
+        var result = restTemplate.getForObject(url, EnrichedStaffExamDto[].class);
+
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(1);
+        assertThat(result[0].name()).isEqualTo(staffEntity.getName());
+        assertThat(result[0].surname()).isEqualTo(staffEntity.getSurname());
+        assertThat(result[0].dni()).isEqualTo(staffEntity.getDni());
+        assertThat(result[0].definitiveExam()).isNull();
+        assertThat(result[0].provisionalExam()).isNotNull();
+        assertThat(result[0].provisionalExam().provisional()).isEqualTo(staffExamEntity.isProvisional());
+        assertThat(result[0].provisionalExam().type()).isEqualTo(staffExamEntity.getType());
+        assertThat(result[0].provisionalExam().shift()).isEqualTo(staffExamEntity.getShift());
+        assertThat(result[0].provisionalExam().total()).isEqualTo(staffExamEntity.getTotal());
+        assertThat(result[0].provisionalExam().con()).isEqualTo(staffExamEntity.getCon());
+        assertThat(result[0].provisionalExam().op()).isEqualTo(staffExamEntity.getOp());
+        assertThat(result[0].provisionalExam().position()).isEqualTo(staffExamEntity.getPosition());
     }
 }

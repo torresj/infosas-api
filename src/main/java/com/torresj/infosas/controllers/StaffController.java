@@ -1,7 +1,9 @@
 package com.torresj.infosas.controllers;
 
 import com.torresj.infosas.dtos.EnrichedStaffDto;
+import com.torresj.infosas.dtos.EnrichedStaffExamDto;
 import com.torresj.infosas.dtos.StaffDto;
+import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.services.StaffService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -42,7 +45,7 @@ public class StaffController {
                             }),
             })
     @GetMapping
-    public ResponseEntity<Set<StaffDto>> getOpeNurses(
+    public ResponseEntity<Set<StaffDto>> getStaff(
             @Parameter(description = "Filter by surname") @RequestParam String filter
     ){
         log.info("Getting SAS staff by filter {}", filter);
@@ -65,11 +68,34 @@ public class StaffController {
                             }),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content),
             })
-    ResponseEntity<EnrichedStaffDto> get(@Parameter(description = "Staff id") @PathVariable long id)
+    ResponseEntity<EnrichedStaffDto> getStaffById(@Parameter(description = "Staff id") @PathVariable long id)
             throws StaffNotFoundException {
         log.info("Getting SAS staff by id {}", id);
         var staff = staffService.getStaffById(id);
         log.info("Staff found");
+        return ResponseEntity.ok(staff);
+    }
+
+    @Operation(summary = "Get SAS Staff for exams by surname filter")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = EnrichedStaffExamDto.class)))
+                            }),
+            })
+    @GetMapping("/exams")
+    public ResponseEntity<List<EnrichedStaffExamDto>> getExams(
+            @Parameter(description = "Filter by surname") @RequestParam String filter,
+            @Parameter(description = "type") @RequestParam StaffExamType type
+    ){
+        log.info("Getting SAS staff exams by filter {}", filter);
+        var staff = staffService.getEnrichedStaffExam(filter, type);
+        log.info("Staff found: {}", staff.size());
         return ResponseEntity.ok(staff);
     }
 }
