@@ -20,8 +20,8 @@ public class SwaggerConfig {
     return new OpenAPI()
         .info(
             new Info()
-                .title("SAS Ope info API")
-                .description("SAS Ope info API")
+                .title("SAS info API")
+                .description("SAS info API")
                 .version(version)
                 .license(
                     new License()

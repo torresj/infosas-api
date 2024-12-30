@@ -55,7 +55,7 @@ public class StaffController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get match by ID")
+    @Operation(summary = "Get SAS staff by ID")
     @ApiResponses(
             value = {
                     @ApiResponse(
