@@ -1,7 +1,10 @@
 package com.torresj.infosas.controllers;
 
+import com.torresj.infosas.dtos.EnrichedSpecificStaffJobBankDto;
 import com.torresj.infosas.dtos.EnrichedStaffDto;
 import com.torresj.infosas.dtos.EnrichedStaffExamDto;
+import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
+import com.torresj.infosas.dtos.ExclusionReasons;
 import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.entities.StaffExamEntity;
@@ -20,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -251,5 +257,101 @@ public class StaffControllerTest {
         assertThat(result[0].provisionalExam().con()).isEqualTo(staffExamEntity.getCon());
         assertThat(result[0].provisionalExam().op()).isEqualTo(staffExamEntity.getOp());
         assertThat(result[0].provisionalExam().position()).isEqualTo(staffExamEntity.getPosition());
+    }
+
+    @Test
+    void givenStaffWithJobBanksWhenGetStaffBySurnameAndTypeThenReturnStaff(){
+        //Given
+        var staffEntity = staffRepository.save(
+                StaffEntity.builder()
+                        .name("Test")
+                        .surname("TestForJobBanks")
+                        .dni("xxxxxxxxx")
+                        .build()
+        );
+
+        var staffJobBankEntity = staffJobBankRepository.save(
+                StaffJobBankEntity.builder()
+                        .staffId(staffEntity.getId())
+                        .type(JobBankType.NURSE)
+                        .status(Status.EXCLUIDA)
+                        .shift("L")
+                        .exclusionCode("E21")
+                        .experience("1")
+                        .formation("2")
+                        .others("3")
+                        .treaty("SI")
+                        .total("4")
+                        .build()
+        );
+
+        String url = getBaseUri() + "/jobbanks?filter=TestForJobBanks&type=NURSE";
+
+        var result = restTemplate.getForObject(url, EnrichedStaffJobBankDto[].class);
+
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(1);
+        assertThat(Arrays.stream(result).findFirst().get().dni()).isEqualTo(staffEntity.getDni());
+        assertThat(Arrays.stream(result).findFirst().get().name()).isEqualTo(staffEntity.getName());
+        assertThat(Arrays.stream(result).findFirst().get().surname()).isEqualTo(staffEntity.getSurname());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank()).isNotNull();
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().status()).isEqualTo(staffJobBankEntity.getStatus());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().type()).isEqualTo(staffJobBankEntity.getType());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().shift()).isEqualTo(staffJobBankEntity.getShift());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().treaty()).isEqualTo(staffJobBankEntity.getTreaty());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().formation()).isEqualTo(staffJobBankEntity.getFormation());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().experience()).isEqualTo(staffJobBankEntity.getExperience());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().others()).isEqualTo(staffJobBankEntity.getOthers());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().total()).isEqualTo(staffJobBankEntity.getTotal());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().exclusionReason()).isEqualTo(ExclusionReasons.getExclusionReason(staffJobBankEntity.getExclusionCode()));
+    }
+
+    @Test
+    void givenStaffWithSpecificJobBanksWhenGetStaffBySurnameAndTypeThenReturnStaff(){
+        //Given
+        var staffEntity = staffRepository.save(
+                StaffEntity.builder()
+                        .name("Test")
+                        .surname("TestForSpecificJobBanks")
+                        .dni("xxxxxxxxx")
+                        .build()
+        );
+
+        var staffJobBankEntity = staffSpecificJobBankRepository.save(
+                StaffSpecificJobBankEntity.builder()
+                        .staffId(staffEntity.getId())
+                        .type(SpecificJobBankType.NURSE_CRITICS)
+                        .general_admission(Status.EXCLUIDA)
+                        .specific_admission(Status.EXCLUIDA)
+                        .shift("L")
+                        .exclusionCodes("E21")
+                        .experience("1")
+                        .formation("2")
+                        .others("3")
+                        .treaty("SI")
+                        .total("4")
+                        .build()
+        );
+
+        String url = getBaseUri() + "/specificjobbanks?filter=TestForSpecificJobBanks&type=NURSE_CRITICS";
+
+        var result = restTemplate.getForObject(url, EnrichedSpecificStaffJobBankDto[].class);
+
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(1);
+        assertThat(Arrays.stream(result).findFirst().get().dni()).isEqualTo(staffEntity.getDni());
+        assertThat(Arrays.stream(result).findFirst().get().name()).isEqualTo(staffEntity.getName());
+        assertThat(Arrays.stream(result).findFirst().get().surname()).isEqualTo(staffEntity.getSurname());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank()).isNotNull();
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().specific_admission()).isEqualTo(staffJobBankEntity.getSpecific_admission());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().general_admission()).isEqualTo(staffJobBankEntity.getGeneral_admission());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().type()).isEqualTo(staffJobBankEntity.getType());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().shift()).isEqualTo(staffJobBankEntity.getShift());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().treaty()).isEqualTo(staffJobBankEntity.getTreaty());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().formation()).isEqualTo(staffJobBankEntity.getFormation());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().experience()).isEqualTo(staffJobBankEntity.getExperience());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().others()).isEqualTo(staffJobBankEntity.getOthers());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().total()).isEqualTo(staffJobBankEntity.getTotal());
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().exclusionReasons()).isEqualTo(List.of(ExclusionReasons.getExclusionReason(staffJobBankEntity.getExclusionCodes())));
     }
 }

@@ -1,8 +1,12 @@
 package com.torresj.infosas.controllers;
 
+import com.torresj.infosas.dtos.EnrichedSpecificStaffJobBankDto;
 import com.torresj.infosas.dtos.EnrichedStaffDto;
 import com.torresj.infosas.dtos.EnrichedStaffExamDto;
+import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
 import com.torresj.infosas.dtos.StaffDto;
+import com.torresj.infosas.enums.JobBankType;
+import com.torresj.infosas.enums.SpecificJobBankType;
 import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.services.StaffService;
@@ -95,6 +99,52 @@ public class StaffController {
     ){
         log.info("Getting SAS staff exams by filter {}", filter);
         var staff = staffService.getEnrichedStaffExam(filter, type);
+        log.info("Staff found: {}", staff.size());
+        return ResponseEntity.ok(staff);
+    }
+
+    @Operation(summary = "Get SAS Staff for job banks by surname filter")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = EnrichedStaffJobBankDto.class)))
+                            }),
+            })
+    @GetMapping("/jobbanks")
+    public ResponseEntity<Set<EnrichedStaffJobBankDto>> getJobBanks(
+            @Parameter(description = "Filter by surname") @RequestParam String filter,
+            @Parameter(description = "type") @RequestParam JobBankType type
+    ){
+        log.info("Getting SAS staff job banks by filter {}", filter);
+        var staff = staffService.getEnrichedStaffJobBank(filter, type);
+        log.info("Staff found: {}", staff.size());
+        return ResponseEntity.ok(staff);
+    }
+
+    @Operation(summary = "Get SAS Staff for specific job banks by surname filter")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = EnrichedSpecificStaffJobBankDto.class)))
+                            }),
+            })
+    @GetMapping("/specificjobbanks")
+    public ResponseEntity<Set<EnrichedSpecificStaffJobBankDto>> getJobBanks(
+            @Parameter(description = "Filter by surname") @RequestParam String filter,
+            @Parameter(description = "type") @RequestParam SpecificJobBankType type
+    ){
+        log.info("Getting SAS staff specific job banks by filter {}", filter);
+        var staff = staffService.getEnrichedSpecificStaffJobBank(filter, type);
         log.info("Staff found: {}", staff.size());
         return ResponseEntity.ok(staff);
     }
