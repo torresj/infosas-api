@@ -68,7 +68,7 @@ public interface StaffMapper {
                 staffEntity.getName(),
                 staffEntity.getSurname(),
                 staffEntity.getDni(),
-                toStaffJobBankDto(staffJobBankEntity)
+                staffJobBankEntity == null ? null : toStaffJobBankDto(staffJobBankEntity)
         );
     }
 
@@ -81,7 +81,7 @@ public interface StaffMapper {
                 staffEntity.getName(),
                 staffEntity.getSurname(),
                 staffEntity.getDni(),
-                toStaffSpecificJobBankDto(staffJobBankEntity)
+                staffJobBankEntity == null ? null : toStaffSpecificJobBankDto(staffJobBankEntity)
         );
     }
 }
