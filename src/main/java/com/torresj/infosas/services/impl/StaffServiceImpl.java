@@ -110,6 +110,7 @@ public class StaffServiceImpl implements StaffService {
                 staffEntity.getName(),
                 staffEntity.getSurname(),
                 staffEntity.getDni(),
+                staffEntity.getType(),
                 exams,
                 jobBanks,
                 specificJobBanks

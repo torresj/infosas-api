@@ -12,6 +12,7 @@ import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
 import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.repositories.StaffExamRepository;
 import com.torresj.infosas.repositories.StaffJobBankRepository;
 import com.torresj.infosas.repositories.StaffRepository;
@@ -78,6 +79,7 @@ public class StaffServiceIntegrationTest {
                 "name3",
                 "test3",
                 "dni3",
+                StaffType.NURSE,
                 0,
                 0,
                 0
@@ -88,6 +90,7 @@ public class StaffServiceIntegrationTest {
                 "name2",
                 "test2",
                 "dni2",
+                StaffType.NURSE,
                 1,
                 1,
                 2

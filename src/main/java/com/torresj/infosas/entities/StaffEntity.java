@@ -1,5 +1,6 @@
 package com.torresj.infosas.entities;
 
+import com.torresj.infosas.enums.StaffType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,8 +15,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(indexes = {
-        @Index(columnList = "dni, name, surname", unique = true),
-        @Index(columnList = "surname")
+        @Index(columnList = "dni, name, surname, type", unique = true),
+        @Index(columnList = "name, surname"),
+        @Index(columnList = "name, surname, type")
 })
 @Getter
 @AllArgsConstructor
@@ -35,4 +37,7 @@ public class StaffEntity {
 
     @Column(updatable = false, nullable = false)
     private String surname;
+
+    @Column(updatable = false, nullable = false)
+    private StaffType type;
 }

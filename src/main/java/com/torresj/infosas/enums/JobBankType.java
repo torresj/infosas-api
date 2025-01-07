@@ -3,6 +3,9 @@ package com.torresj.infosas.enums;
 public enum JobBankType {
     TCAE,
     NURSE,
+    FISIO,
+    SPEECH_THERAPIST,
+    OCCUPATIONAL_THERAPY,
     NURSE_FAMILY,
     NURSE_GYNECOLOGY,
     NURSE_PEDIATRICIAN,
