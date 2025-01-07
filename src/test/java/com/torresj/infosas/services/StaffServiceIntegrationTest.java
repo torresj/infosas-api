@@ -59,16 +59,19 @@ public class StaffServiceIntegrationTest {
                         .name("name")
                         .surname("surname")
                         .dni("dni")
+                        .type(StaffType.NURSE)
                         .build(),
                 StaffEntity.builder()
                         .name("name2")
                         .surname("test2")
                         .dni("dni2")
+                        .type(StaffType.NURSE)
                         .build(),
                 StaffEntity.builder()
                         .name("name3")
                         .surname("test3")
                         .dni("dni3")
+                        .type(StaffType.NURSE)
                         .build()
         );
 
@@ -118,6 +121,7 @@ public class StaffServiceIntegrationTest {
                         .surname("surnameIt")
                         .name("name")
                         .dni("dni")
+                        .type(StaffType.NURSE)
                         .build()
         );
 
@@ -148,6 +152,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithExams")
                         .name("name")
                         .dni("dni")
+                        .type(StaffType.NURSE)
                         .build()
         );
 
@@ -178,6 +183,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithProvisionalExam")
                         .name("name")
                         .dni("dni")
+                        .type(StaffType.NURSE)
                         .build()
         );
         staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, true));
@@ -205,6 +211,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithDefinitiveExam")
                         .name("name")
                         .dni("dni")
+                        .type(StaffType.NURSE)
                         .build()
         );
         staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, false));
@@ -232,6 +239,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithJobBank")
                         .name("name")
                         .dni("dni")
+                        .type(StaffType.NURSE)
                         .build()
         );
         var staffJobBankEntity = staffJobBankRepository.save(givenStaffJobBank(entity.getId(), TCAE));
@@ -269,6 +277,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithSpecificJobBank")
                         .name("name")
                         .dni("dni")
+                        .type(StaffType.NURSE)
                         .build()
         );
         var staffJobBankEntity = staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(), NURSE_CRITICS));

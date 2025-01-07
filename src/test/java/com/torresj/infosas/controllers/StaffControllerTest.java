@@ -13,6 +13,7 @@ import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
 import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.enums.Status;
 import com.torresj.infosas.repositories.StaffExamRepository;
 import com.torresj.infosas.repositories.StaffJobBankRepository;
@@ -61,6 +62,7 @@ public class StaffControllerTest {
                         .name("Jaime")
                         .surname("Torres Benavente")
                         .dni("xxxxxxxxx")
+                        .type(StaffType.NURSE)
                         .build()
         );
 
@@ -130,6 +132,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestById")
                         .dni("xxxxxxxxx")
+                        .type(StaffType.NURSE)
                         .build()
         );
 
@@ -223,6 +226,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestForExams")
                         .dni("xxxxxxxxx")
+                        .type(StaffType.NURSE)
                         .build()
         );
 
@@ -267,6 +271,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestForJobBanks")
                         .dni("xxxxxxxxx")
+                        .type(StaffType.NURSE)
                         .build()
         );
 
@@ -314,6 +319,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestForSpecificJobBanks")
                         .dni("xxxxxxxxx")
+                        .type(StaffType.NURSE)
                         .build()
         );
 

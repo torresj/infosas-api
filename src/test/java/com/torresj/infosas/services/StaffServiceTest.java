@@ -15,6 +15,7 @@ import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
 import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.mappers.StaffMapper;
 import com.torresj.infosas.repositories.StaffExamRepository;
@@ -122,9 +123,7 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffIdNotExist_whenGetById_thenAnErrorIsThrown() {
-        Exception exception = assertThrows(StaffNotFoundException.class, () -> {
-            staffService.getStaffById(1L);
-        });
+        Exception exception = assertThrows(StaffNotFoundException.class, () -> staffService.getStaffById(1L));
 
         assertThat(exception.getMessage())
                 .isEqualTo("Could not find staff with id 1");
@@ -209,6 +208,7 @@ public class StaffServiceTest {
                 .dni("dni")
                 .name("name1")
                 .surname("surname1")
+                .type(StaffType.NURSE)
                 .build();
     }
 
@@ -238,7 +238,7 @@ public class StaffServiceTest {
     }
 
     private StaffDto getStaffDto(int exams, int jobBanks, int specialJobBanks) {
-        return new StaffDto(1L, "name1","surname1","dni", exams, jobBanks, specialJobBanks);
+        return new StaffDto(1L, "name1","surname1","dni", StaffType.NURSE, exams, jobBanks, specialJobBanks);
     }
 
     private StaffExamDto getStaffExamDto() {
