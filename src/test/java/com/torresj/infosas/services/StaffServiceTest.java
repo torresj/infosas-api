@@ -66,7 +66,7 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffs_whenGetAll_thenReturnListOfStaff() {
-        StaffEntity staffEntity = getStaffEntity();
+        StaffEntity staffEntity = getStaffEntity(StaffType.NURSE);
         StaffDto staffDto = getStaffDto(0,0,0);
         when(staffRepository.findAllBySurnameContainingIgnoreCase("name", Limit.of(100)))
                 .thenReturn(Set.of(staffEntity));
@@ -77,8 +77,90 @@ public class StaffServiceTest {
     }
 
     @Test
+    void givenStaffs_whenGetAllWithNameAndSurname_thenReturnListOfStaff() {
+        when(staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase("name", "surname", Limit.of(100)))
+                .thenReturn(Set.of(
+                        StaffEntity.builder()
+                                .id(1L)
+                                .name("name")
+                                .surname("surname")
+                                .dni("xxxxxx")
+                                .type(StaffType.NURSE)
+                                .build(),
+                        StaffEntity.builder()
+                                .id(1L)
+                                .name("name2")
+                                .surname("surname2")
+                                .dni("xxxxxx")
+                                .type(StaffType.NURSE)
+                                .build(),
+                        StaffEntity.builder()
+                                .id(1L)
+                                .name("name")
+                                .surname("surname")
+                                .dni("xxxxxx")
+                                .type(StaffType.FISIO)
+                                .build()
+                ));
+
+        Set<StaffDto> result = staffService.getStaffs("name","surname", null);
+
+        assertThat(result).hasSize(3);
+    }
+
+    @Test
+    void givenStaffs_whenGetAllWithTypeAndSurname_thenReturnListOfStaff() {
+        when(staffRepository.findAllBySurnameContainingIgnoreCaseAndType("surname", StaffType.NURSE, Limit.of(100)))
+                .thenReturn(Set.of(
+                        StaffEntity.builder()
+                                .id(1L)
+                                .name("name")
+                                .surname("surname")
+                                .dni("xxxxxx")
+                                .type(StaffType.NURSE)
+                                .build(),
+                        StaffEntity.builder()
+                                .id(1L)
+                                .name("name2")
+                                .surname("surname2")
+                                .dni("xxxxxx")
+                                .type(StaffType.NURSE)
+                                .build()
+                ));
+
+        Set<StaffDto> result = staffService.getStaffs(null,"surname", StaffType.NURSE);
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
+    void givenStaffs_whenGetAllWithNameAndTypeAndSurname_thenReturnListOfStaff() {
+        when(staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType("name","surname", StaffType.NURSE, Limit.of(100)))
+                .thenReturn(Set.of(
+                        StaffEntity.builder()
+                                .id(1L)
+                                .name("name")
+                                .surname("surname")
+                                .dni("xxxxxx")
+                                .type(StaffType.NURSE)
+                                .build(),
+                        StaffEntity.builder()
+                                .id(1L)
+                                .name("name2")
+                                .surname("surname2")
+                                .dni("xxxxxx")
+                                .type(StaffType.NURSE)
+                                .build()
+                ));
+
+        Set<StaffDto> result = staffService.getStaffs("name","surname", StaffType.NURSE);
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
     void givenStaffsWithJobBankAndExam_whenGetAll_thenReturnListOfStaff() {
-        StaffEntity staffEntity = getStaffEntity();
+        StaffEntity staffEntity = getStaffEntity(StaffType.NURSE);
         StaffDto staffDto = getStaffDto(1,1,1);
         when(staffRepository.findAllBySurnameContainingIgnoreCase("name", Limit.of(100)))
                 .thenReturn(Set.of(staffEntity));
@@ -96,7 +178,7 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffWithJobBankAndExam_whenGetById_thenReturnStaff() {
-        var staffEntity = getStaffEntity();
+        var staffEntity = getStaffEntity(StaffType.NURSE);
         var staffExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE, true);
         var staffSpecificJobBankEntity = getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_DIALYSIS);
         var staffJobBankEntity = getStaffJobBankEntity(staffEntity.getId(), TCAE);
@@ -131,7 +213,7 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffWithExam_whenGetBySurnameAndType_thenStaffsAreReturned() {
-        var staffEntity = getStaffEntity();
+        var staffEntity = getStaffEntity(StaffType.NURSE);
         var staffProvisionalExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE, true);
         var staffDefinitiveExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE, false);
         var enrichedStaffExample = getEnrichedStaffExamDto(
@@ -156,7 +238,7 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffWithJobBank_whenGetBySurnameAndType_thenReturnStaffsAreReturned() {
-        var staffEntity = getStaffEntity();
+        var staffEntity = getStaffEntity(StaffType.NURSE);
         var staffJobBankEntity = getStaffJobBankEntity(staffEntity.getId(), TCAE);
         var enrichedStaffExample = getEnrichedStaffJobBankDto(
                 staffEntity,
@@ -178,7 +260,7 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffWithSpecificJobBank_whenGetBySurnameAndType_thenReturnStaffsAreReturned() {
-        var staffEntity = getStaffEntity();
+        var staffEntity = getStaffEntity(StaffType.NURSE);
         var staffSpecificJobBankEntity = getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_CRITICS);
         var enrichedStaffExample = getEnrichedSpecificStaffJobBankDto(
                 staffEntity,
@@ -201,14 +283,14 @@ public class StaffServiceTest {
         assertThat(result.stream().findFirst().orElse(null)).isEqualTo(enrichedStaffExample);
     }
 
-    private StaffEntity getStaffEntity() {
+    private StaffEntity getStaffEntity(StaffType staffType) {
         return
             StaffEntity.builder()
                 .id(1L)
                 .dni("dni")
                 .name("name1")
                 .surname("surname1")
-                .type(StaffType.NURSE)
+                .type(staffType)
                 .build();
     }
 

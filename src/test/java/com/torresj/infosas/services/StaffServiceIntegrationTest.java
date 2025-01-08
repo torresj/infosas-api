@@ -63,13 +63,13 @@ public class StaffServiceIntegrationTest {
                         .build(),
                 StaffEntity.builder()
                         .name("name2")
-                        .surname("test2")
+                        .surname("test22")
                         .dni("dni2")
                         .type(StaffType.NURSE)
                         .build(),
                 StaffEntity.builder()
                         .name("name3")
-                        .surname("test3")
+                        .surname("test23")
                         .dni("dni3")
                         .type(StaffType.NURSE)
                         .build()
@@ -80,7 +80,7 @@ public class StaffServiceIntegrationTest {
         StaffDto staffDto1 = new StaffDto(
                 entitesList.get(2).getId(),
                 "name3",
-                "test3",
+                "test23",
                 "dni3",
                 StaffType.NURSE,
                 0,
@@ -91,7 +91,7 @@ public class StaffServiceIntegrationTest {
         StaffDto staffDto2 = new StaffDto(
                 entitesList.get(1).getId(),
                 "name2",
-                "test2",
+                "test22",
                 "dni2",
                 StaffType.NURSE,
                 1,
@@ -105,12 +105,164 @@ public class StaffServiceIntegrationTest {
         staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(1).getId(),NURSE_DIALYSIS));
 
         //when
-        Set<StaffDto> staffs = staffService.getStaffsBySurname("test");
+        Set<StaffDto> staffs = staffService.getStaffsBySurname("test2");
 
         //then
         assertThat(staffs).hasSize(2);
         assertThat(staffs).contains(staffDto1);
         assertThat(staffs).contains(staffDto2);
+    }
+
+    @Test
+    void givenStaffsWhenGetStaffByNameAndSurnameThenReturnStaff() {
+        //Given
+        List<StaffEntity> entities = List.of(
+                StaffEntity.builder()
+                        .name("test-name")
+                        .surname("test-surname")
+                        .dni("dni")
+                        .type(StaffType.NURSE)
+                        .build(),
+                StaffEntity.builder()
+                        .name("test-name2")
+                        .surname("test-surname2")
+                        .dni("dni2")
+                        .type(StaffType.NURSE)
+                        .build(),
+                StaffEntity.builder()
+                        .name("test-name3")
+                        .surname("test-surname3")
+                        .dni("dni3")
+                        .type(StaffType.NURSE)
+                        .build()
+        );
+
+        var entitesList = Streamable.of(staffRepository.saveAll(entities)).toList();
+
+        StaffDto staffDto1 = new StaffDto(
+                entitesList.get(2).getId(),
+                "test-name3",
+                "test-surname3",
+                "dni3",
+                StaffType.NURSE,
+                1,
+                1,
+                2
+        );
+
+        staffExamRepository.save(givenStaffExam(entitesList.get(2).getId(), NURSE, false));
+        staffJobBankRepository.save(givenStaffJobBank(entitesList.get(2).getId(), JobBankType.NURSE));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(2).getId(),NURSE_CRITICS));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(2).getId(),NURSE_DIALYSIS));
+
+        //when
+        Set<StaffDto> staffs = staffService.getStaffs("name3", "surname3", null);
+
+        //then
+        assertThat(staffs).hasSize(1);
+        assertThat(staffs).contains(staffDto1);
+    }
+
+    @Test
+    void givenStaffsWhenGetStaffByTypeAndSurnameThenReturnStaff() {
+        //Given
+        List<StaffEntity> entities = List.of(
+                StaffEntity.builder()
+                        .name("test-name4")
+                        .surname("test-surname4")
+                        .dni("dni")
+                        .type(StaffType.NURSE)
+                        .build(),
+                StaffEntity.builder()
+                        .name("test-name5")
+                        .surname("test-surname5")
+                        .dni("dni2")
+                        .type(StaffType.NURSE)
+                        .build(),
+                StaffEntity.builder()
+                        .name("test-name6")
+                        .surname("test-surname6")
+                        .dni("dni3")
+                        .type(StaffType.FISIO)
+                        .build()
+        );
+
+        var entitesList = Streamable.of(staffRepository.saveAll(entities)).toList();
+
+        StaffDto staffDto1 = new StaffDto(
+                entitesList.get(0).getId(),
+                "test-name4",
+                "test-surname4",
+                "dni",
+                StaffType.NURSE,
+                0,
+                0,
+                0
+        );
+
+        StaffDto staffDto2 = new StaffDto(
+                entitesList.get(1).getId(),
+                "test-name5",
+                "test-surname5",
+                "dni2",
+                StaffType.NURSE,
+                0,
+                0,
+                0
+        );
+
+        //when
+        Set<StaffDto> staffs = staffService.getStaffs(null, "test-surname", StaffType.NURSE);
+
+        //then
+        assertThat(staffs).hasSize(2);
+        assertThat(staffs).contains(staffDto1);
+        assertThat(staffs).contains(staffDto2);
+    }
+
+    @Test
+    void givenStaffsWhenGetStaffByTypeAndSurnameAndNameThenReturnStaff() {
+        //Given
+        List<StaffEntity> entities = List.of(
+                StaffEntity.builder()
+                        .name("test-name7")
+                        .surname("test-surname7")
+                        .dni("dni")
+                        .type(StaffType.NURSE)
+                        .build(),
+                StaffEntity.builder()
+                        .name("test-name8")
+                        .surname("test-surname8")
+                        .dni("dni2")
+                        .type(StaffType.NURSE)
+                        .build(),
+                StaffEntity.builder()
+                        .name("test-name9")
+                        .surname("test-surname9")
+                        .dni("dni3")
+                        .type(StaffType.OCCUPATIONAL_THERAPY)
+                        .build()
+        );
+
+        var entitesList = Streamable.of(staffRepository.saveAll(entities)).toList();
+
+        StaffDto staffDto1 = new StaffDto(
+                entitesList.get(2).getId(),
+                "test-name9",
+                "test-surname9",
+                "dni3",
+                StaffType.OCCUPATIONAL_THERAPY,
+                0,
+                0,
+                0
+        );
+
+        //when
+        Set<StaffDto> staffs = staffService.getStaffs("test-name", "test-surname", StaffType.OCCUPATIONAL_THERAPY);
+
+        //then
+        assertThat(staffs).hasSize(1);
+        assertThat(staffs).contains(staffDto1);
     }
 
     @Test

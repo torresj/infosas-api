@@ -9,6 +9,7 @@ import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
 import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.mappers.StaffMapper;
 import com.torresj.infosas.repositories.StaffExamRepository;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 @Slf4j
@@ -49,6 +52,43 @@ public class StaffServiceImpl implements StaffService {
                     return toStaffDto(entity, exams, jobBanks, specificJobBanks);
                 })
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<StaffDto> getStaffs(String name, String surname, StaffType type) {
+        if(isBlank(name) && type == null) {
+            return getStaffsBySurname(surname);
+        }else if(!isBlank(name) && type == null) {
+            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase(name, surname, Limit.of(MAX_NUMBER_OF_STAFFS))
+                    .stream()
+                    .map(entity -> {
+                        int exams = staffExamRepository.findByStaffId(entity.getId()).size();
+                        int jobBanks = staffJobBankRepository.findByStaffId(entity.getId()).size();
+                        int specificJobBanks = staffSpecificJobBankRepository.findByStaffId(entity.getId()).size();
+                        return toStaffDto(entity, exams, jobBanks, specificJobBanks);
+                    })
+                    .collect(Collectors.toSet());
+        } else if(isBlank(name) && type != null) {
+            return staffRepository.findAllBySurnameContainingIgnoreCaseAndType(surname, type, Limit.of(MAX_NUMBER_OF_STAFFS))
+                    .stream()
+                    .map(entity -> {
+                        int exams = staffExamRepository.findByStaffId(entity.getId()).size();
+                        int jobBanks = staffJobBankRepository.findByStaffId(entity.getId()).size();
+                        int specificJobBanks = staffSpecificJobBankRepository.findByStaffId(entity.getId()).size();
+                        return toStaffDto(entity, exams, jobBanks, specificJobBanks);
+                    })
+                    .collect(Collectors.toSet());
+        } else {
+            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType(name, surname, type,  Limit.of(MAX_NUMBER_OF_STAFFS))
+                    .stream()
+                    .map(entity -> {
+                        int exams = staffExamRepository.findByStaffId(entity.getId()).size();
+                        int jobBanks = staffJobBankRepository.findByStaffId(entity.getId()).size();
+                        int specificJobBanks = staffSpecificJobBankRepository.findByStaffId(entity.getId()).size();
+                        return toStaffDto(entity, exams, jobBanks, specificJobBanks);
+                    })
+                    .collect(Collectors.toSet());
+        }
     }
 
     @Override

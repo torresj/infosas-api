@@ -8,6 +8,7 @@ import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
 import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.services.StaffService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +36,30 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class StaffController {
     private final StaffService staffService;
+
+    @Operation(summary = "Get SAS Staff")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Success",
+                            content = {
+                                    @Content(
+                                            mediaType = "application/json",
+                                            array = @ArraySchema(schema = @Schema(implementation = StaffDto.class)))
+                            }),
+            })
+    @GetMapping("/v2/")
+    public ResponseEntity<Set<StaffDto>> getStaffWithParams(
+            @Parameter(description = "Filter by name") @RequestParam(required = false) String name,
+            @Parameter(description = "Filter by surname") @RequestParam String surname,
+            @Parameter(description = "Filter by type") @RequestParam(required = false) StaffType type
+            ){
+        log.info("Getting SAS staff by name {}, surname {} and type {}", name, surname, type);
+        var staff = staffService.getStaffs(name, surname, type);
+        log.info("Staff found: {}", staff.size());
+        return ResponseEntity.ok(staff);
+    }
 
     @Operation(summary = "Get SAS Staff by surname filter")
     @ApiResponses(
