@@ -57,9 +57,9 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public Set<StaffDto> getStaffs(String name, String surname, StaffType type) {
         if(isBlank(name) && type == null) {
-            return getStaffsBySurname(surname);
+            return getStaffsBySurname(surname.trim());
         }else if(!isBlank(name) && type == null) {
-            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase(name, surname, Limit.of(MAX_NUMBER_OF_STAFFS))
+            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase(name.trim(), surname.trim(), Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -69,7 +69,7 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         } else if(isBlank(name) && type != null) {
-            return staffRepository.findAllBySurnameContainingIgnoreCaseAndType(surname, type, Limit.of(MAX_NUMBER_OF_STAFFS))
+            return staffRepository.findAllBySurnameContainingIgnoreCaseAndType(surname.trim(), type, Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -79,7 +79,7 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         } else {
-            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType(name, surname, type,  Limit.of(MAX_NUMBER_OF_STAFFS))
+            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType(name.trim(), surname.trim(), type,  Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
