@@ -49,7 +49,7 @@ public class StaffController {
                                             array = @ArraySchema(schema = @Schema(implementation = StaffDto.class)))
                             }),
             })
-    @GetMapping("/v2/")
+    @GetMapping()
     public ResponseEntity<Set<StaffDto>> getStaffWithParams(
             @Parameter(description = "Filter by name") @RequestParam(required = false) String name,
             @Parameter(description = "Filter by surname") @RequestParam String surname,
@@ -57,28 +57,6 @@ public class StaffController {
             ){
         log.info("Getting SAS staff by name {}, surname {} and type {}", name, surname, type);
         var staff = staffService.getStaffs(name, surname, type);
-        log.info("Staff found: {}", staff.size());
-        return ResponseEntity.ok(staff);
-    }
-
-    @Operation(summary = "Get SAS Staff by surname filter")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Success",
-                            content = {
-                                    @Content(
-                                            mediaType = "application/json",
-                                            array = @ArraySchema(schema = @Schema(implementation = StaffDto.class)))
-                            }),
-            })
-    @GetMapping
-    public ResponseEntity<Set<StaffDto>> getStaff(
-            @Parameter(description = "Filter by surname") @RequestParam String filter
-    ){
-        log.info("Getting SAS staff by filter {}", filter);
-        var staff = staffService.getStaffsBySurname(filter);
         log.info("Staff found: {}", staff.size());
         return ResponseEntity.ok(staff);
     }

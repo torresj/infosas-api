@@ -55,7 +55,7 @@ public class StaffControllerTest {
     }
 
     @Test
-    void givenStaffsWhenGetStaffBySurnameThenReturnStaff(){
+    void givenStaffsWhenGetStaffByNameAndSurnameAndTypeThenReturnStaff(){
         //Given
         var staffEntity = staffRepository.save(
                 StaffEntity.builder()
@@ -110,7 +110,7 @@ public class StaffControllerTest {
                         .build()
         );
 
-        String url = getBaseUri() + "?filter=torres";
+        String url = getBaseUri() + "?name=jaime&surname=torres&type=NURSE";
 
         var result = restTemplate.getForObject(url, StaffDto[].class);
 
