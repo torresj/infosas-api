@@ -58,6 +58,16 @@ spec:
               value: "{{ .Values.db.db_user }}"
             - name: DB_PASSWORD
               value: "{{ .Values.db.db_password }}"
+            - name: RABBITMQ_HOST
+              value: "{{ .Values.rabbitmq.host }}"
+            - name: RABBITMQ_PORT
+              value: "{{ .Values.rabbitmq.port }}"
+            - name: RABBITMQ_USER
+              value: "{{ .Values.rabbitmq.username }}"
+            - name: RABBITMQ_PASSWORD
+              value: "{{ .Values.rabbitmq.password }}"
+            - name: TELEGRAM_NOTIFICATION_CHANNEL
+              value: "{{ .Values.telegram.notification.channel.id }}"
             {{ if .Values.cloud.config.enabled -}}
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "true"

@@ -14,6 +14,19 @@ spring:
           sharedCache:
             mode: UNSPECIFIED
 
+  #Rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: test
+    password: test
+
+# Telegram notification channel
+telegram:
+  notification:
+    channel:
+      id: 1234
+
 #Loggin
 logging:
   config: classpath:logback-spring-local.xml

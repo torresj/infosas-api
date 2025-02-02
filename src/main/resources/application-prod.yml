@@ -13,6 +13,19 @@ spring:
         persistence:
           sharedCache:
             mode: UNSPECIFIED
+  #Rabbitmq
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
+# Telegram notification channel
+telegram:
+  notification:
+    channel:
+      id: ${TELEGRAM_NOTIFICATION_CHANNEL}
+
 #Loggin
 logging:
   config: classpath:logback-spring-prod.xml

@@ -71,7 +71,7 @@ jobs:
       # Install chart
       - run:
           name: Install chart
-          command: helm upgrade infosas-api helm/infosas-api -n sas --set db.db_user=$DB_USER,db.db_name=$DB_NAME,db.db_password=$DB_PASSWORD --install --kubeconfig=helm/kubeconfig
+          command: helm upgrade infosas-api helm/infosas-api -n sas --set db.db_user=$DB_USER,db.db_name=$DB_NAME,db.db_password=$DB_PASSWORD,rabbitmq.host=$RABBITMQ_HOST,rabbitmq.port=$RABBITMQ_PORT,rabbitmq.username=$RABBITMQ_USER,rabbitmq.password=$RABBITMQ_PASSWORD,telegram.notification.channel.id=$TELEGRAM_NOTIFICATION_CHANNEL --install --kubeconfig=helm/kubeconfig
       # Check deployment
       - run:
           name: Check deployment

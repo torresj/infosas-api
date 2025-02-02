@@ -39,6 +39,17 @@ db:
   db_user:
   db_password:
 
+rabbitmq:
+  host:
+  port:
+  username:
+  password:
+
+telegram:
+  notification:
+    channel:
+      id:
+
 ingress:
   enabled: true
   controller:
