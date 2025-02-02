@@ -21,7 +21,7 @@ public class RabbitmqProducerService implements ProducerService {
     public void sendMessage(QueueMessage message) {
         try {
             rabbitTemplate.convertAndSend(
-                    "notificationExchange",
+                    "notificationsExchange",
                     message.getType().name(),
                     objectMapper.writeValueAsString(message)
             );
