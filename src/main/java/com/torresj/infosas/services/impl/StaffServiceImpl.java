@@ -4,9 +4,11 @@ import com.torresj.infosas.dtos.EnrichedSpecificStaffJobBankDto;
 import com.torresj.infosas.dtos.EnrichedStaffDto;
 import com.torresj.infosas.dtos.EnrichedStaffExamDto;
 import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
+import com.torresj.infosas.dtos.QueueMessage;
 import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.enums.JobBankType;
+import com.torresj.infosas.enums.MessageType;
 import com.torresj.infosas.enums.SpecificJobBankType;
 import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.enums.StaffType;
@@ -16,9 +18,11 @@ import com.torresj.infosas.repositories.StaffExamRepository;
 import com.torresj.infosas.repositories.StaffJobBankRepository;
 import com.torresj.infosas.repositories.StaffRepository;
 import com.torresj.infosas.repositories.StaffSpecificJobBankRepository;
+import com.torresj.infosas.services.ProducerService;
 import com.torresj.infosas.services.StaffService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +44,10 @@ public class StaffServiceImpl implements StaffService {
     private final StaffSpecificJobBankRepository staffSpecificJobBankRepository;
     private final StaffExamRepository staffExamRepository;
     private final StaffMapper staffMapper;
+    private final ProducerService producerService;
+
+    @Value("${telegram.notification.channel.id}")
+    private final String notificationChannelId;
 
     @Override
     public Set<StaffDto> getStaffsBySurname(String surname) {
@@ -56,8 +64,9 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Set<StaffDto> getStaffs(String name, String surname, StaffType type) {
+        Set<StaffDto> staffs;
         if(isBlank(name) && type == null) {
-            return getStaffsBySurname(surname.trim());
+            staffs = getStaffsBySurname(surname.trim());
         }else if(!isBlank(name) && type == null) {
             return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase(name.trim(), surname.trim(), Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
@@ -69,7 +78,7 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         } else if(isBlank(name) && type != null) {
-            return staffRepository.findAllBySurnameContainingIgnoreCaseAndType(surname.trim(), type, Limit.of(MAX_NUMBER_OF_STAFFS))
+            staffs = staffRepository.findAllBySurnameContainingIgnoreCaseAndType(surname.trim(), type, Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -79,7 +88,7 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         } else {
-            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType(name.trim(), surname.trim(), type,  Limit.of(MAX_NUMBER_OF_STAFFS))
+            staffs = staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType(name.trim(), surname.trim(), type,  Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -89,6 +98,14 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         }
+        if (staffs.isEmpty()) {
+            producerService.sendMessage(QueueMessage.builder()
+                    .text("No se ha encontrado a ningún profesional para la búsqueda con nombre: " + name + ", apellidos: " + surname + " y categoria profesional " + type)
+                    .chatId(notificationChannelId)
+                    .type(MessageType.WARNING)
+                    .build());
+        }
+        return staffs;
     }
 
     @Override

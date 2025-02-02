@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QueueMessage implements Serializable {
-    private long chatId;
-    private String error;
+    private String chatId;
+    private String text;
     private MessageType type;
 }

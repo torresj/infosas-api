@@ -1,3 +1,18 @@
 #Loggin
 logging:
   config: classpath:logback-spring-test.xml
+
+
+  #Rabbitmq
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: test
+    password: test
+
+# Telegram notification channel
+telegram:
+  notification:
+    channel:
+      id: 1234
