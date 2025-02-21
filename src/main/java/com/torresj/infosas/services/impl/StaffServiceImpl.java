@@ -98,6 +98,7 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         }
+        log.info("Staff empty: {}",staffs.isEmpty());
         if (staffs.isEmpty()) {
             log.info("No staff found for {} {} {}", name, surname, type);
             producerService.sendMessage(QueueMessage.builder()
