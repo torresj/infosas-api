@@ -99,6 +99,7 @@ public class StaffServiceImpl implements StaffService {
                     .collect(Collectors.toSet());
         }
         if (staffs.isEmpty()) {
+            log.info("No staff found for {} {} {}", name, surname, type);
             producerService.sendMessage(QueueMessage.builder()
                     .text("No se ha encontrado a ningún profesional para la búsqueda con nombre: " + name + ", apellidos: " + surname + " y categoria profesional " + type)
                     .chatId(notificationChannelId)
