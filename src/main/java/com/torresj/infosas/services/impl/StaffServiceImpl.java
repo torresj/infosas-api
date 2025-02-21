@@ -68,7 +68,7 @@ public class StaffServiceImpl implements StaffService {
         if(isBlank(name) && type == null) {
             staffs = getStaffsBySurname(surname.trim());
         }else if(!isBlank(name) && type == null) {
-            return staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase(name.trim(), surname.trim(), Limit.of(MAX_NUMBER_OF_STAFFS))
+            staffs = staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase(name.trim(), surname.trim(), Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -98,9 +98,8 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         }
-        log.info("Staff empty: {}",staffs.isEmpty());
+
         if (staffs.isEmpty()) {
-            log.info("No staff found for {} {} {}", name, surname, type);
             producerService.sendMessage(QueueMessage.builder()
                     .text("No se ha encontrado a ningún profesional para la búsqueda con nombre: " + name + ", apellidos: " + surname + " y categoria profesional " + type)
                     .chatId(notificationChannelId)
