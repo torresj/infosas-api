@@ -6,6 +6,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ProblemDetail;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,5 +25,16 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatus()).isEqualTo(NOT_FOUND.value());
         assertThat(response.getDetail()).isEqualTo(message);
         assertThat(response.getTitle()).isEqualTo(message);
+    }
+
+    @Test
+    void handleBadRequestException_shouldThrowBadRequestException() {
+
+        BadRequestException ex = new BadRequestException();
+
+        ProblemDetail response = exceptionHandler.handleBadRequestException(ex);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getStatus()).isEqualTo(BAD_REQUEST.value());
     }
 }

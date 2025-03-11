@@ -63,6 +63,19 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    public Set<StaffDto> getStaffsByDni(String dni) {
+        return staffRepository.findAllByDni(dni, Limit.of(MAX_NUMBER_OF_STAFFS))
+                .stream()
+                .map(entity -> {
+                    int exams = staffExamRepository.findByStaffId(entity.getId()).size();
+                    int jobBanks = staffJobBankRepository.findByStaffId(entity.getId()).size();
+                    int specificJobBanks = staffSpecificJobBankRepository.findByStaffId(entity.getId()).size();
+                    return toStaffDto(entity, exams, jobBanks, specificJobBanks);
+                })
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public Set<StaffDto> getStaffs(String name, String surname, StaffType type) {
         Set<StaffDto> staffs;
         if(isBlank(name) && type == null) {

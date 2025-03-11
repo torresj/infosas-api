@@ -16,6 +16,7 @@ import java.util.Set;
 
 public interface StaffService {
     Set<StaffDto> getStaffsBySurname(String surname);
+    Set<StaffDto> getStaffsByDni(String dni);
     Set<StaffDto> getStaffs(String name, String surname, StaffType type);
     EnrichedStaffDto getStaffById(Long id) throws StaffNotFoundException;
     List<EnrichedStaffExamDto> getEnrichedStaffExam(String surname, StaffExamType type);

@@ -19,11 +19,13 @@ import com.torresj.infosas.repositories.StaffExamRepository;
 import com.torresj.infosas.repositories.StaffJobBankRepository;
 import com.torresj.infosas.repositories.StaffRepository;
 import com.torresj.infosas.repositories.StaffSpecificJobBankRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
@@ -113,6 +115,94 @@ public class StaffControllerTest {
         );
 
         String url = getBaseUri() + "?name=jaime&surname=torres&type=NURSE";
+
+        var result = restTemplate.getForObject(url, StaffDto[].class);
+
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(1);
+        assertThat(result[0].name()).isEqualTo(staffEntity.getName());
+        assertThat(result[0].surname()).isEqualTo(staffEntity.getSurname());
+        assertThat(result[0].dni()).isEqualTo(staffEntity.getDni());
+        assertThat(result[0].exams()).isEqualTo(1);
+        assertThat(result[0].specificJobBanks()).isEqualTo(1);
+        assertThat(result[0].jobBanks()).isEqualTo(1);
+    }
+
+    @Test
+    void givenARequestWithDniAndSurnameThenAnErrorIsReturned(){
+        String url = getBaseUri() + "?dni=12345678A&surname=torres";
+
+        var result = restTemplate.getForEntity(url, String.class);
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,result.getStatusCode());
+    }
+
+    @Test
+    void givenARequestWithNoDniAndNoSurnameThenAnErrorIsReturned(){
+        String url = getBaseUri();
+
+        var result = restTemplate.getForEntity(url, String.class);
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,result.getStatusCode());
+    }
+
+    @Test
+    void givenStaffWhenGetStaffByDniThenReturnStaff(){
+        //Given
+        var staffEntity = staffRepository.save(
+                StaffEntity.builder()
+                        .name("Test")
+                        .surname("TestByDni")
+                        .dni("***4567**")
+                        .type(StaffType.NURSE)
+                        .build()
+        );
+
+        staffExamRepository.save(
+                StaffExamEntity.builder()
+                        .staffId(staffEntity.getId())
+                        .provisional(true)
+                        .type(StaffExamType.NURSE)
+                        .op(1)
+                        .shift("L")
+                        .total(3)
+                        .con(2)
+                        .position(100)
+                        .build()
+        );
+
+        staffSpecificJobBankRepository.save(
+                StaffSpecificJobBankEntity.builder()
+                        .staffId(staffEntity.getId())
+                        .type(SpecificJobBankType.NURSE_CRITICS)
+                        .general_admission(Status.EXCLUIDA)
+                        .specific_admission(Status.EXCLUIDA)
+                        .shift("L")
+                        .exclusionCodes("E21")
+                        .experience("1")
+                        .formation("2")
+                        .others("3")
+                        .treaty("SI")
+                        .total("4")
+                        .build()
+        );
+
+        staffJobBankRepository.save(
+                StaffJobBankEntity.builder()
+                        .staffId(staffEntity.getId())
+                        .type(JobBankType.NURSE)
+                        .status(Status.EXCLUIDA)
+                        .shift("L")
+                        .exclusionCode("E21")
+                        .experience("1")
+                        .formation("2")
+                        .others("3")
+                        .treaty("SI")
+                        .total("4")
+                        .build()
+        );
+
+        String url = getBaseUri() + "?dni=12345678A";
 
         var result = restTemplate.getForObject(url, StaffDto[].class);
 

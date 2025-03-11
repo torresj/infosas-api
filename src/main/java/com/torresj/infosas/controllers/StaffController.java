@@ -11,6 +11,8 @@ import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.services.StaffService;
+import com.torresj.infosas.utils.StringUtils;
+import com.torresj.infosas.validators.RequestValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -36,6 +38,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class StaffController {
     private final StaffService staffService;
+    private final RequestValidator validator;
 
     @Operation(summary = "Get SAS Staff")
     @ApiResponses(
@@ -52,13 +55,23 @@ public class StaffController {
     @GetMapping()
     public ResponseEntity<Set<StaffDto>> getStaffWithParams(
             @Parameter(description = "Filter by name") @RequestParam(required = false) String name,
-            @Parameter(description = "Filter by surname") @RequestParam String surname,
-            @Parameter(description = "Filter by type") @RequestParam(required = false) StaffType type
+            @Parameter(description = "Filter by surname") @RequestParam(required = false) String surname,
+            @Parameter(description = "Filter by type") @RequestParam(required = false) StaffType type,
+            @Parameter(description = "Filter by dni") @RequestParam(required = false) String dni
             ){
-        log.info("Getting SAS staff by name {}, surname {} and type {}", name, surname, type);
-        var staff = staffService.getStaffs(name, surname, type);
-        log.info("Staff found: {}", staff.size());
-        return ResponseEntity.ok(staff);
+        validator.validate(surname, dni);
+        if(dni != null && !dni.isBlank()){
+            String obfuscatedDni = StringUtils.obfuscateDni(dni);
+            log.info("Getting SAS staff by dni {}", obfuscatedDni);
+            var staff = staffService.getStaffsByDni(obfuscatedDni);
+            log.info("Staff found: {}", staff.size());
+            return ResponseEntity.ok(staff);
+        } else {
+            log.info("Getting SAS staff by name {}, surname {} and type {}", name, surname, type);
+            var staff = staffService.getStaffs(name, surname, type);
+            log.info("Staff found: {}", staff.size());
+            return ResponseEntity.ok(staff);
+        }
     }
 
     @GetMapping("/{id}")
