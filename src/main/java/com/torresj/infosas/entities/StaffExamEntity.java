@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(indexes = {
         @Index(columnList = "staffId"),
-        @Index(columnList = "staffId, type, provisional", unique = true)
+        @Index(columnList = "staffId, type", unique = true)
 })
 @Getter
 @AllArgsConstructor

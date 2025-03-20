@@ -15,6 +15,7 @@ public record StaffSpecificJobBankDto(
         String experience,
         String formation,
         String others,
-        String total
+        String total,
+        boolean provisional
 ) {
 }

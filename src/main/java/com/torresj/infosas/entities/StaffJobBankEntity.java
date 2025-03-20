@@ -58,4 +58,7 @@ public class StaffJobBankEntity {
 
     @Column(updatable = false)
     private String total;
+
+    @Column(updatable = false, nullable = false)
+    private boolean provisional;
 }

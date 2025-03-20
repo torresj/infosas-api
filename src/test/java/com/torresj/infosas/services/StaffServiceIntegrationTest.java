@@ -297,7 +297,7 @@ public class StaffServiceIntegrationTest {
     }
 
     @Test
-    void givenStaffWithExamsWhenGetStaffsBySurnameAndTypeThenReturnStaffWithExams() {
+    void givenStaffWithExamsWhenGetStaffsBySurnameThenReturnStaffWithExams() {
         //Given
         var entity = staffRepository.save(
                 StaffEntity.builder()
@@ -308,11 +308,11 @@ public class StaffServiceIntegrationTest {
                         .build()
         );
 
-        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, false));
         staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, true));
+        staffExamRepository.save(givenStaffExam(entity.getId(), StaffExamType.TCAE, false));
 
         //when
-        List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithExams", NURSE);
+        List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithExams");
 
         //then
         assertThat(staffs).isNotNull();
@@ -321,10 +321,11 @@ public class StaffServiceIntegrationTest {
         assertThat(staffs.getFirst().surname()).isEqualTo(entity.getSurname());
         assertThat(staffs.getFirst().name()).isEqualTo(entity.getName());
         assertThat(staffs.getFirst().dni()).isEqualTo(entity.getDni());
-        assertThat(staffs.getFirst().provisionalExam().provisional()).isTrue();
-        assertThat(staffs.getFirst().provisionalExam().type()).isEqualTo(NURSE);
-        assertThat(staffs.getFirst().definitiveExam().provisional()).isFalse();
-        assertThat(staffs.getFirst().definitiveExam().type()).isEqualTo(NURSE);
+        assertThat(staffs.getFirst().exams()).hasSize(2);
+        assertThat(staffs.getFirst().exams().getFirst().provisional()).isTrue();
+        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE);
+        assertThat(staffs.getFirst().exams().get(1).provisional()).isFalse();
+        assertThat(staffs.getFirst().exams().get(1).type()).isEqualTo(StaffExamType.TCAE);
     }
 
     @Test
@@ -341,7 +342,7 @@ public class StaffServiceIntegrationTest {
         staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, true));
 
         //when
-        List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithProvisionalExam", NURSE);
+        List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithProvisionalExam");
 
         //then
         assertThat(staffs).isNotNull();
@@ -350,9 +351,9 @@ public class StaffServiceIntegrationTest {
         assertThat(staffs.getFirst().surname()).isEqualTo(entity.getSurname());
         assertThat(staffs.getFirst().name()).isEqualTo(entity.getName());
         assertThat(staffs.getFirst().dni()).isEqualTo(entity.getDni());
-        assertThat(staffs.getFirst().provisionalExam().provisional()).isTrue();
-        assertThat(staffs.getFirst().provisionalExam().type()).isEqualTo(NURSE);
-        assertThat(staffs.getFirst().definitiveExam()).isNull();
+        assertThat(staffs.getFirst().exams()).hasSize(1);
+        assertThat(staffs.getFirst().exams().getFirst().provisional()).isTrue();
+        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE);
     }
 
     @Test
@@ -369,7 +370,7 @@ public class StaffServiceIntegrationTest {
         staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, false));
 
         //when
-        List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithDefinitiveExam", NURSE);
+        List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithDefinitiveExam");
 
         //then
         assertThat(staffs).isNotNull();
@@ -378,9 +379,9 @@ public class StaffServiceIntegrationTest {
         assertThat(staffs.getFirst().surname()).isEqualTo(entity.getSurname());
         assertThat(staffs.getFirst().name()).isEqualTo(entity.getName());
         assertThat(staffs.getFirst().dni()).isEqualTo(entity.getDni());
-        assertThat(staffs.getFirst().definitiveExam().provisional()).isFalse();
-        assertThat(staffs.getFirst().definitiveExam().type()).isEqualTo(NURSE);
-        assertThat(staffs.getFirst().provisionalExam()).isNull();
+        assertThat(staffs.getFirst().exams()).hasSize(1);
+        assertThat(staffs.getFirst().exams().getFirst().provisional()).isFalse();
+        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE);
     }
 
     @Test

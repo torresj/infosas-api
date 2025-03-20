@@ -14,10 +14,13 @@ import com.torresj.infosas.mappers.StaffMapper;
 import com.torresj.infosas.mappers.StaffMapperImpl;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.torresj.infosas.enums.JobBankType.TCAE;
 import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_DIALYSIS;
 import static com.torresj.infosas.enums.StaffExamType.NURSE;
 import static com.torresj.infosas.enums.Status.ADMITIDA;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StaffMapperTest {
@@ -125,15 +128,18 @@ public class StaffMapperTest {
         var staffExamEntity1 = StaffExamEntity.builder().provisional(true).build();
         var staffExamEntity2 = StaffExamEntity.builder().provisional(false).build();
 
-        EnrichedStaffExamDto dto = staffMapper.toEnrichedStaffExamDto(staffEntity,staffExamEntity1,staffExamEntity2);
+        EnrichedStaffExamDto dto = staffMapper.toEnrichedStaffExamDto(staffEntity, List.of(
+                staffExamEntity1,staffExamEntity2)
+        );
 
         assertThat(dto).isNotNull();
         assertThat(dto.id()).isEqualTo(staffEntity.getId());
         assertThat(dto.dni()).isEqualTo("dni");
         assertThat(dto.name()).isEqualTo("name");
         assertThat(dto.surname()).isEqualTo("surname");
-        assertThat(dto.provisionalExam()).isEqualTo(staffMapper.toStaffExamDto(staffExamEntity1));
-        assertThat(dto.definitiveExam()).isEqualTo(staffMapper.toStaffExamDto(staffExamEntity2));
+        assertThat(dto.exams()).hasSize(2);
+        assertThat(dto.exams().getFirst()).isEqualTo(staffMapper.toStaffExamDto(staffExamEntity1));
+        assertThat(dto.exams().get(1)).isEqualTo(staffMapper.toStaffExamDto(staffExamEntity2));
     }
 
     @Test
@@ -145,15 +151,14 @@ public class StaffMapperTest {
                 .surname("surname")
                 .build();
 
-        EnrichedStaffExamDto dto = staffMapper.toEnrichedStaffExamDto(staffEntity,null,null);
+        EnrichedStaffExamDto dto = staffMapper.toEnrichedStaffExamDto(staffEntity, emptyList());
 
         assertThat(dto).isNotNull();
         assertThat(dto.id()).isEqualTo(staffEntity.getId());
         assertThat(dto.dni()).isEqualTo("dni");
         assertThat(dto.name()).isEqualTo("name");
         assertThat(dto.surname()).isEqualTo("surname");
-        assertThat(dto.provisionalExam()).isNull();
-        assertThat(dto.definitiveExam()).isNull();
+        assertThat(dto.exams()).hasSize(0);
     }
 
     @Test

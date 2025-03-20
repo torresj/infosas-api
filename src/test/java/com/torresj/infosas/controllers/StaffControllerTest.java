@@ -344,15 +344,15 @@ public class StaffControllerTest {
         assertThat(result[0].name()).isEqualTo(staffEntity.getName());
         assertThat(result[0].surname()).isEqualTo(staffEntity.getSurname());
         assertThat(result[0].dni()).isEqualTo(staffEntity.getDni());
-        assertThat(result[0].definitiveExam()).isNull();
-        assertThat(result[0].provisionalExam()).isNotNull();
-        assertThat(result[0].provisionalExam().provisional()).isEqualTo(staffExamEntity.isProvisional());
-        assertThat(result[0].provisionalExam().type()).isEqualTo(staffExamEntity.getType());
-        assertThat(result[0].provisionalExam().shift()).isEqualTo(staffExamEntity.getShift());
-        assertThat(result[0].provisionalExam().total()).isEqualTo(staffExamEntity.getTotal());
-        assertThat(result[0].provisionalExam().con()).isEqualTo(staffExamEntity.getCon());
-        assertThat(result[0].provisionalExam().op()).isEqualTo(staffExamEntity.getOp());
-        assertThat(result[0].provisionalExam().position()).isEqualTo(staffExamEntity.getPosition());
+        assertThat(result[0].exams()).isNotNull();
+        assertThat(result[0].exams()).isNotEmpty();
+        assertThat(result[0].exams().getFirst().provisional()).isEqualTo(staffExamEntity.isProvisional());
+        assertThat(result[0].exams().getFirst().type()).isEqualTo(staffExamEntity.getType());
+        assertThat(result[0].exams().getFirst().shift()).isEqualTo(staffExamEntity.getShift());
+        assertThat(result[0].exams().getFirst().total()).isEqualTo(staffExamEntity.getTotal());
+        assertThat(result[0].exams().getFirst().con()).isEqualTo(staffExamEntity.getCon());
+        assertThat(result[0].exams().getFirst().op()).isEqualTo(staffExamEntity.getOp());
+        assertThat(result[0].exams().getFirst().position()).isEqualTo(staffExamEntity.getPosition());
     }
 
     @Test

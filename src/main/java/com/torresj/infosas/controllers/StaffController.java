@@ -7,7 +7,6 @@ import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
 import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.SpecificJobBankType;
-import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.services.StaffService;
@@ -110,11 +109,10 @@ public class StaffController {
             })
     @GetMapping("/exams")
     public ResponseEntity<List<EnrichedStaffExamDto>> getExams(
-            @Parameter(description = "Filter by surname") @RequestParam String filter,
-            @Parameter(description = "type") @RequestParam StaffExamType type
+            @Parameter(description = "Filter by surname") @RequestParam String filter
     ){
         log.info("Getting SAS staff exams by filter {}", filter);
-        var staff = staffService.getEnrichedStaffExam(filter, type);
+        var staff = staffService.getEnrichedStaffExam(filter);
         log.info("Staff found: {}", staff.size());
         return ResponseEntity.ok(staff);
     }

@@ -15,6 +15,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -40,22 +41,21 @@ public interface StaffMapper {
                 staffSpecificJobBankEntity.getExperience(),
                 staffSpecificJobBankEntity.getFormation(),
                 staffSpecificJobBankEntity.getOthers(),
-                staffSpecificJobBankEntity.getTotal()
+                staffSpecificJobBankEntity.getTotal(),
+                staffSpecificJobBankEntity.isProvisional()
         );
     }
 
     default EnrichedStaffExamDto toEnrichedStaffExamDto(
             StaffEntity staffEntity,
-            StaffExamEntity provisionalExamEntity,
-            StaffExamEntity definitiveExamEntity
+            List<StaffExamEntity> examsEntity
     ){
         return new EnrichedStaffExamDto(
                 staffEntity.getId(),
                 staffEntity.getName(),
                 staffEntity.getSurname(),
                 staffEntity.getDni(),
-                provisionalExamEntity == null ? null : toStaffExamDto(provisionalExamEntity),
-                definitiveExamEntity == null ? null : toStaffExamDto(definitiveExamEntity)
+                examsEntity.stream().map(this::toStaffExamDto).toList()
         );
     }
 

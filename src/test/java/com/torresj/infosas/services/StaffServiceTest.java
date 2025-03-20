@@ -222,14 +222,12 @@ public class StaffServiceTest {
         );
         when(staffRepository.findAllBySurnameContainingIgnoreCase("name", Limit.of(100)))
                 .thenReturn(Set.of(staffEntity));
-        when(staffExamRepository.findByStaffIdAndTypeAndProvisional(staffEntity.getId(),NURSE, true))
-                .thenReturn(staffProvisionalExamEntity);
-        when(staffExamRepository.findByStaffIdAndTypeAndProvisional(staffEntity.getId(),NURSE, false))
-                .thenReturn(staffDefinitiveExamEntity);
-        when(staffMapper.toEnrichedStaffExamDto(staffEntity,staffProvisionalExamEntity,staffDefinitiveExamEntity))
+        when(staffExamRepository.findByStaffId(staffEntity.getId()))
+                .thenReturn(List.of(staffProvisionalExamEntity,staffDefinitiveExamEntity));
+        when(staffMapper.toEnrichedStaffExamDto(staffEntity,List.of(staffProvisionalExamEntity,staffDefinitiveExamEntity)))
                 .thenReturn(enrichedStaffExample);
 
-        List<EnrichedStaffExamDto> result = staffService.getEnrichedStaffExam("name", NURSE);
+        List<EnrichedStaffExamDto> result = staffService.getEnrichedStaffExam("name");
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
@@ -338,7 +336,8 @@ public class StaffServiceTest {
                 "",
                 "",
                 "",
-                ""
+                "",
+                true
         );
     }
 
@@ -352,7 +351,8 @@ public class StaffServiceTest {
                 "",
                 "",
                 "",
-                ""
+                "",
+                true
         );
     }
 
@@ -366,23 +366,25 @@ public class StaffServiceTest {
             staffEntity.getName(),
             staffEntity.getSurname(),
             staffEntity.getDni(),
-            new StaffExamDto(
-                    provisional.getType(),
-                    provisional.getShift(),
-                    provisional.isProvisional(),
-                    provisional.getTotal(),
-                    provisional.getOp(),
-                    provisional.getCon(),
-                    provisional.getPosition()
-            ),
-            new StaffExamDto(
-                    definitive.getType(),
-                    definitive.getShift(),
-                    definitive.isProvisional(),
-                    definitive.getTotal(),
-                    definitive.getOp(),
-                    definitive.getCon(),
-                    definitive.getPosition()
+            List.of(
+                    new StaffExamDto(
+                            provisional.getType(),
+                            provisional.getShift(),
+                            provisional.isProvisional(),
+                            provisional.getTotal(),
+                            provisional.getOp(),
+                            provisional.getCon(),
+                            provisional.getPosition()
+                    ),
+                    new StaffExamDto(
+                            definitive.getType(),
+                            definitive.getShift(),
+                            definitive.isProvisional(),
+                            definitive.getTotal(),
+                            definitive.getOp(),
+                            definitive.getCon(),
+                            definitive.getPosition()
+                    )
             )
         );
     }
@@ -405,7 +407,8 @@ public class StaffServiceTest {
                         staffJobBankEntity.getExperience(),
                         staffJobBankEntity.getFormation(),
                         staffJobBankEntity.getOthers(),
-                        staffJobBankEntity.getTotal()
+                        staffJobBankEntity.getTotal(),
+                        true
                 )
         );
     }
@@ -429,7 +432,8 @@ public class StaffServiceTest {
                         staffJobBankEntity.getExperience(),
                         staffJobBankEntity.getFormation(),
                         staffJobBankEntity.getOthers(),
-                        staffJobBankEntity.getTotal()
+                        staffJobBankEntity.getTotal(),
+                        true
                 )
         );
     }
