@@ -17,9 +17,21 @@ public class MetricsControllerAspect {
     @Before(
             value = "execution(* com.torresj.infosas.services.StaffService.getStaffsBySurname(..))"
     )
-    public void updateStaffsEndpointCounter(){
+    public void updateStaffsEndpointCounterBySurname(){
         Counter counter = Counter.builder("infosas")
                 .description("a number of requests to infosas")
+                .tag("filter", "surname")
+                .register(meterRegistry);
+        counter.increment();
+    }
+
+    @Before(
+            value = "execution(* com.torresj.infosas.services.StaffService.getStaffsBySurname(..))"
+    )
+    public void updateStaffsEndpointCounterByDni(){
+        Counter counter = Counter.builder("infosas")
+                .description("a number of requests to infosas")
+                .tag("filter", "dni")
                 .register(meterRegistry);
         counter.increment();
     }
