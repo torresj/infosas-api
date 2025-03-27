@@ -63,7 +63,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Set<StaffDto> getStaffsByDni(String dni) {
-        return staffRepository.findAllByDni(dni, Limit.of(MAX_NUMBER_OF_STAFFS))
+        Set<StaffDto> staffs = staffRepository.findAllByDni(dni, Limit.of(MAX_NUMBER_OF_STAFFS))
                 .stream()
                 .map(entity -> {
                     int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -72,6 +72,16 @@ public class StaffServiceImpl implements StaffService {
                     return toStaffDto(entity, exams, jobBanks, specificJobBanks);
                 })
                 .collect(Collectors.toSet());
+
+        if (staffs.isEmpty()) {
+            producerService.sendMessage(QueueMessage.builder()
+                    .text("No se ha encontrado a ningún profesional para la búsqueda con dni " + dni )
+                    .chatId(notificationChannelId)
+                    .type(MessageType.WARNING)
+                    .build());
+        }
+
+        return staffs;
     }
 
     @Override
