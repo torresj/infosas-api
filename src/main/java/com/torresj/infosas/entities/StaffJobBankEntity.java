@@ -61,4 +61,7 @@ public class StaffJobBankEntity {
 
     @Column(updatable = false, nullable = false)
     private boolean provisional;
+
+    @Column(updatable = false)
+    private Integer cutOffYear;
 }

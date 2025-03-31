@@ -16,6 +16,7 @@ public record StaffSpecificJobBankDto(
         String formation,
         String others,
         String total,
-        boolean provisional
+        boolean provisional,
+        Integer cutOffYear
 ) {
 }

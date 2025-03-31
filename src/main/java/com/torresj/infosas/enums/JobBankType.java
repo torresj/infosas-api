@@ -10,5 +10,13 @@ public enum JobBankType {
     NURSE_GYNECOLOGY,
     NURSE_PEDIATRICIAN,
     NURSE_MENTAL_HEALTH,
-    NURSE_WORK
+    NURSE_WORK,
+    TEAP,
+    TEDN,
+    TEDS,
+    TEL,
+    TEMN,
+    TERD,
+    TER,
+    TF
 }

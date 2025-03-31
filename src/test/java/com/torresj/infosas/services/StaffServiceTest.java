@@ -337,7 +337,8 @@ public class StaffServiceTest {
                 "",
                 "",
                 "",
-                true
+                true,
+                2023
         );
     }
 
@@ -352,7 +353,8 @@ public class StaffServiceTest {
                 "",
                 "",
                 "",
-                true
+                true,
+                2023
         );
     }
 
@@ -408,7 +410,8 @@ public class StaffServiceTest {
                         staffJobBankEntity.getFormation(),
                         staffJobBankEntity.getOthers(),
                         staffJobBankEntity.getTotal(),
-                        true
+                        true,
+                        2023
                 )
         );
     }
@@ -433,7 +436,8 @@ public class StaffServiceTest {
                         staffJobBankEntity.getFormation(),
                         staffJobBankEntity.getOthers(),
                         staffJobBankEntity.getTotal(),
-                        true
+                        true,
+                        2023
                 )
         );
     }

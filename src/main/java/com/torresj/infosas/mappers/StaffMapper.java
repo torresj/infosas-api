@@ -42,7 +42,8 @@ public interface StaffMapper {
                 staffSpecificJobBankEntity.getFormation(),
                 staffSpecificJobBankEntity.getOthers(),
                 staffSpecificJobBankEntity.getTotal(),
-                staffSpecificJobBankEntity.isProvisional()
+                staffSpecificJobBankEntity.isProvisional(),
+                staffSpecificJobBankEntity.getCutOffYear()
         );
     }
 
