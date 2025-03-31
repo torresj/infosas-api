@@ -5,5 +5,13 @@ public enum StaffType {
     TCAE,
     FISIO,
     SPEECH_THERAPIST,
-    OCCUPATIONAL_THERAPY
+    OCCUPATIONAL_THERAPY,
+    TEAP,
+    TEDN,
+    TEDS,
+    TEL,
+    TEMN,
+    TERD,
+    TER,
+    TF
 }
