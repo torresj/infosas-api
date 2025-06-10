@@ -63,7 +63,7 @@ jobs:
       # Add chartmuseum repo
       - run:
           name: Add chartmuseum repo
-          command: helm repo add torresj https://charts.torresj.es --username $CHARTS_USER --password $CHARTS_PASSWORD && helm repo update
+          command: helm repo add torresj $CHARTS_URL --username $CHARTS_USER --password $CHARTS_PASSWORD && helm repo update
       # Generate and push chart
       - run:
           name: Push chart
@@ -85,10 +85,10 @@ workflows:
     jobs:
       - build:
           context:
-            - "Kubernetes cluster"
+            - "Kubernetes cluster v2"
       - deploy:
           context:
-            - "Kubernetes cluster"
+            - "Kubernetes cluster v2"
           requires:
             - build
 
