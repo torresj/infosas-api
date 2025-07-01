@@ -14,6 +14,6 @@ public record StaffJobBankDto(
         String others,
         String total,
         boolean provisional,
-        Integer cutOffYear
+        int cutOffYear
 ) {
 }

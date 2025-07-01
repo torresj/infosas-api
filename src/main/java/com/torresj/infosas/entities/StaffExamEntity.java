@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(indexes = {
         @Index(columnList = "staffId"),
-        @Index(columnList = "staffId, type", unique = true)
+        @Index(columnList = "staffId, type, examYear", unique = true)
 })
 @Getter
 @AllArgsConstructor
@@ -52,4 +52,6 @@ public class StaffExamEntity {
     @Column(updatable = false, nullable = false)
     private int position;
 
+    @Column(updatable = false, nullable = false)
+    private int examYear;
 }

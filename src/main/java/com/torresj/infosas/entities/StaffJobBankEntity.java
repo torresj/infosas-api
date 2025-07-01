@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(indexes = {
         @Index(columnList = "staffId"),
-        @Index(columnList = "staffId, type", unique = true)
+        @Index(columnList = "staffId, type, cutOffYear", unique = true)
 })
 @Getter
 @AllArgsConstructor
@@ -62,6 +62,6 @@ public class StaffJobBankEntity {
     @Column(updatable = false, nullable = false)
     private boolean provisional;
 
-    @Column(updatable = false)
-    private Integer cutOffYear;
+    @Column(updatable = false, nullable = false)
+    private int cutOffYear;
 }
