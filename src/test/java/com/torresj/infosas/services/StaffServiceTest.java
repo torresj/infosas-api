@@ -322,7 +322,7 @@ public class StaffServiceTest {
     }
 
     private StaffExamDto getStaffExamDto() {
-        return new StaffExamDto(NURSE,"L",false,0,0,0,0);
+        return new StaffExamDto(NURSE,"L",false,0,0,0,0,2023);
     }
 
     private StaffSpecificJobBankDto getStaffSpecificJobBankDto() {
@@ -376,7 +376,8 @@ public class StaffServiceTest {
                             provisional.getTotal(),
                             provisional.getOp(),
                             provisional.getCon(),
-                            provisional.getPosition()
+                            provisional.getPosition(),
+                            provisional.getExamYear()
                     ),
                     new StaffExamDto(
                             definitive.getType(),
@@ -385,7 +386,8 @@ public class StaffServiceTest {
                             definitive.getTotal(),
                             definitive.getOp(),
                             definitive.getCon(),
-                            definitive.getPosition()
+                            definitive.getPosition(),
+                            provisional.getExamYear()
                     )
             )
         );

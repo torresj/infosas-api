@@ -9,6 +9,7 @@ public record StaffExamDto(
         float total,
         float op,
         float con,
-        int position
+        int position,
+        int examYear
 ) {
 }
