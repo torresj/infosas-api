@@ -45,7 +45,7 @@ public class StaffJobBankEntity {
     private JobBankType type;
 
     @Column(updatable = false)
-    private String exclusionCode;
+    private String exclusionCodes;
 
     @Column(updatable = false)
     private String experience;

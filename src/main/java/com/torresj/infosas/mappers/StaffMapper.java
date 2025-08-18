@@ -12,7 +12,6 @@ import com.torresj.infosas.entities.StaffExamEntity;
 import com.torresj.infosas.entities.StaffJobBankEntity;
 import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,8 +21,26 @@ import java.util.stream.Collectors;
 public interface StaffMapper {
     StaffExamDto toStaffExamDto(StaffExamEntity staffExamEntity);
 
-    @Mapping(target = "exclusionReason", expression = "java( com.torresj.infosas.dtos.ExclusionReasons.getExclusionReason(staffJobBankEntity.getExclusionCode()) )")
-    StaffJobBankDto toStaffJobBankDto(StaffJobBankEntity staffJobBankEntity);
+    default StaffJobBankDto toStaffJobBankDto(StaffJobBankEntity staffJobBankEntity){
+        return new StaffJobBankDto(
+                staffJobBankEntity.getTreaty(),
+                staffJobBankEntity.getShift(),
+                staffJobBankEntity.getStatus(),
+                staffJobBankEntity.getType(),
+                staffJobBankEntity.getExclusionCodes() == null ?
+                        null
+                        : Arrays.stream(staffJobBankEntity.getExclusionCodes()
+                                .split(","))
+                        .map(ExclusionReasons::getExclusionReason)
+                        .collect(Collectors.toList()),
+                staffJobBankEntity.getExperience(),
+                staffJobBankEntity.getFormation(),
+                staffJobBankEntity.getOthers(),
+                staffJobBankEntity.getTotal(),
+                staffJobBankEntity.isProvisional(),
+                staffJobBankEntity.getCutOffYear()
+        );
+    }
 
     default StaffSpecificJobBankDto toStaffSpecificJobBankDto(StaffSpecificJobBankEntity staffSpecificJobBankEntity){
         return new StaffSpecificJobBankDto(

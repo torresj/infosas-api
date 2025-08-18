@@ -55,7 +55,7 @@ public class StaffMapperTest {
         StaffJobBankEntity staffJobBankEntity = StaffJobBankEntity.builder()
                 .id(1L)
                 .staffId(1L)
-                .exclusionCode("A01")
+                .exclusionCodes("A01")
                 .experience("1")
                 .formation("2")
                 .others("3")
@@ -69,8 +69,8 @@ public class StaffMapperTest {
         StaffJobBankDto dto = staffMapper.toStaffJobBankDto(staffJobBankEntity);
 
         assertThat(dto).isNotNull();
-        assertThat(dto.exclusionReason()).isNotNull();
-        assertThat(dto.exclusionReason().code()).isEqualTo("A01");
+        assertThat(dto.exclusionReasons()).isNotNull();
+        assertThat(dto.exclusionReasons().getFirst().code()).isEqualTo("A01");
         assertThat(dto.experience()).isEqualTo("1");
         assertThat(dto.formation()).isEqualTo("2");
         assertThat(dto.others()).isEqualTo("3");

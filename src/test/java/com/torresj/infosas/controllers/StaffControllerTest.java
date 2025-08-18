@@ -105,7 +105,7 @@ public class StaffControllerTest {
                         .type(JobBankType.NURSE)
                         .status(Status.EXCLUIDA)
                         .shift("L")
-                        .exclusionCode("E21")
+                        .exclusionCodes("E21")
                         .experience("1")
                         .formation("2")
                         .others("3")
@@ -193,7 +193,7 @@ public class StaffControllerTest {
                         .type(JobBankType.NURSE)
                         .status(Status.EXCLUIDA)
                         .shift("L")
-                        .exclusionCode("E21")
+                        .exclusionCodes("E21")
                         .experience("1")
                         .formation("2")
                         .others("3")
@@ -263,7 +263,7 @@ public class StaffControllerTest {
                         .type(JobBankType.NURSE)
                         .status(Status.EXCLUIDA)
                         .shift("L")
-                        .exclusionCode("E21")
+                        .exclusionCodes("E21")
                         .experience("1")
                         .formation("2")
                         .others("3")
@@ -296,7 +296,7 @@ public class StaffControllerTest {
         assertThat(result.staffJobBanks().stream().findFirst().get().formation()).isEqualTo(staffJobBankEntity.getFormation());
         assertThat(result.staffJobBanks().stream().findFirst().get().total()).isEqualTo(staffJobBankEntity.getTotal());
         assertThat(result.staffJobBanks().stream().findFirst().get().others()).isEqualTo(staffJobBankEntity.getOthers());
-        assertThat(result.staffJobBanks().stream().findFirst().get().exclusionReason()).isNotNull();
+        assertThat(result.staffJobBanks().stream().findFirst().get().exclusionReasons()).isNotNull();
         assertThat(result.staffSpecificJobBanks()).hasSize(1);
         assertThat(result.staffSpecificJobBanks().stream().findFirst().get().type()).isEqualTo(staffSpecificJobBankEntity.getType());
         assertThat(result.staffSpecificJobBanks().stream().findFirst().get().treaty()).isEqualTo(staffSpecificJobBankEntity.getTreaty());
@@ -373,7 +373,7 @@ public class StaffControllerTest {
                         .type(JobBankType.NURSE)
                         .status(Status.EXCLUIDA)
                         .shift("L")
-                        .exclusionCode("E21")
+                        .exclusionCodes("E21")
                         .experience("1")
                         .formation("2")
                         .others("3")
@@ -400,7 +400,7 @@ public class StaffControllerTest {
         assertThat(Arrays.stream(result).findFirst().get().staffJobBank().experience()).isEqualTo(staffJobBankEntity.getExperience());
         assertThat(Arrays.stream(result).findFirst().get().staffJobBank().others()).isEqualTo(staffJobBankEntity.getOthers());
         assertThat(Arrays.stream(result).findFirst().get().staffJobBank().total()).isEqualTo(staffJobBankEntity.getTotal());
-        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().exclusionReason()).isEqualTo(ExclusionReasons.getExclusionReason(staffJobBankEntity.getExclusionCode()));
+        assertThat(Arrays.stream(result).findFirst().get().staffJobBank().exclusionReasons()).isEqualTo(List.of(ExclusionReasons.getExclusionReason(staffJobBankEntity.getExclusionCodes())));
     }
 
     @Test
