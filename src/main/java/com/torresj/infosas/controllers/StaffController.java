@@ -5,8 +5,7 @@ import com.torresj.infosas.dtos.EnrichedStaffDto;
 import com.torresj.infosas.dtos.EnrichedStaffExamDto;
 import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
 import com.torresj.infosas.dtos.StaffDto;
-import com.torresj.infosas.enums.JobBankType;
-import com.torresj.infosas.enums.SpecificJobBankType;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.services.StaffService;
@@ -132,7 +131,7 @@ public class StaffController {
     @GetMapping("/jobbanks")
     public ResponseEntity<Set<EnrichedStaffJobBankDto>> getJobBanks(
             @Parameter(description = "Filter by surname") @RequestParam String filter,
-            @Parameter(description = "type") @RequestParam JobBankType type
+            @Parameter(description = "type") @RequestParam SasSubType type
     ){
         log.info("Getting SAS staff job banks by filter {}", filter);
         var staff = staffService.getEnrichedStaffJobBank(filter, type);
@@ -153,9 +152,9 @@ public class StaffController {
                             }),
             })
     @GetMapping("/specificjobbanks")
-    public ResponseEntity<Set<EnrichedSpecificStaffJobBankDto>> getJobBanks(
+    public ResponseEntity<Set<EnrichedSpecificStaffJobBankDto>> getSpecificJobBanks(
             @Parameter(description = "Filter by surname") @RequestParam String filter,
-            @Parameter(description = "type") @RequestParam SpecificJobBankType type
+            @Parameter(description = "type") @RequestParam SasSubType type
     ){
         log.info("Getting SAS staff specific job banks by filter {}", filter);
         var staff = staffService.getEnrichedSpecificStaffJobBank(filter, type);

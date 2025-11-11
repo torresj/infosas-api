@@ -5,8 +5,7 @@ import com.torresj.infosas.dtos.EnrichedStaffDto;
 import com.torresj.infosas.dtos.EnrichedStaffExamDto;
 import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
 import com.torresj.infosas.dtos.StaffDto;
-import com.torresj.infosas.enums.JobBankType;
-import com.torresj.infosas.enums.SpecificJobBankType;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 
@@ -19,6 +18,6 @@ public interface StaffService {
     Set<StaffDto> getStaffs(String name, String surname, StaffType type);
     EnrichedStaffDto getStaffById(Long id) throws StaffNotFoundException;
     List<EnrichedStaffExamDto> getEnrichedStaffExam(String surname);
-    Set<EnrichedStaffJobBankDto> getEnrichedStaffJobBank(String surname, JobBankType type);
-    Set<EnrichedSpecificStaffJobBankDto> getEnrichedSpecificStaffJobBank(String surname, SpecificJobBankType type);
+    Set<EnrichedStaffJobBankDto> getEnrichedStaffJobBank(String surname, SasSubType type);
+    Set<EnrichedSpecificStaffJobBankDto> getEnrichedSpecificStaffJobBank(String surname, SasSubType type);
 }

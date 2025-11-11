@@ -1,9 +1,9 @@
 package com.torresj.infosas.dtos;
 
-import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.SasSubType;
 
 public record StaffExamDto(
-        StaffExamType type,
+        SasSubType type,
         String shift,
         boolean provisional,
         float total,

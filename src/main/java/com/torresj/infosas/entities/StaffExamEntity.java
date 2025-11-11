@@ -1,13 +1,7 @@
 package com.torresj.infosas.entities;
 
-import com.torresj.infosas.enums.StaffExamType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import com.torresj.infosas.enums.SasSubType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,10 +29,8 @@ public class StaffExamEntity {
     private String shift;
 
     @Column(updatable = false, nullable = false)
-    private StaffExamType type;
-
-    @Column(updatable = false, nullable = false)
-    private boolean provisional;
+    @Enumerated(EnumType.STRING)
+    private SasSubType type;
 
     @Column(updatable = false)
     private float total;
@@ -51,6 +43,9 @@ public class StaffExamEntity {
 
     @Column(updatable = false, nullable = false)
     private int position;
+
+    @Column(updatable = false, nullable = false)
+    private boolean provisional;
 
     @Column(updatable = false, nullable = false)
     private int examYear;

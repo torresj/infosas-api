@@ -9,9 +9,7 @@ import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.entities.StaffExamEntity;
 import com.torresj.infosas.entities.StaffJobBankEntity;
 import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
-import com.torresj.infosas.enums.JobBankType;
-import com.torresj.infosas.enums.SpecificJobBankType;
-import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.repositories.StaffExamRepository;
 import com.torresj.infosas.repositories.StaffJobBankRepository;
@@ -26,10 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 import java.util.Set;
 
-import static com.torresj.infosas.enums.JobBankType.TCAE;
-import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_CRITICS;
-import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_DIALYSIS;
-import static com.torresj.infosas.enums.StaffExamType.NURSE;
+import static com.torresj.infosas.enums.SasSubType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
@@ -99,10 +94,10 @@ public class StaffServiceIntegrationTest {
                 2
         );
 
-        staffExamRepository.save(givenStaffExam(entitesList.get(1).getId(), NURSE, false));
-        staffJobBankRepository.save(givenStaffJobBank(entitesList.get(1).getId(), TCAE));
-        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(1).getId(),NURSE_CRITICS));
-        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(1).getId(),NURSE_DIALYSIS));
+        staffExamRepository.save(givenStaffExam(entitesList.get(1).getId(), NURSE_EXAM, false));
+        staffJobBankRepository.save(givenStaffJobBank(entitesList.get(1).getId(), TCAE_JOB_BANK));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(1).getId(),NURSE_CRITICS_SPECIFIC_JOB_BANK));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(1).getId(),NURSE_DIALYSIS_SPECIFIC_JOB_BANK));
 
         //when
         Set<StaffDto> staffs = staffService.getStaffsBySurname("test2");
@@ -150,10 +145,10 @@ public class StaffServiceIntegrationTest {
                 2
         );
 
-        staffExamRepository.save(givenStaffExam(entitesList.get(2).getId(), NURSE, false));
-        staffJobBankRepository.save(givenStaffJobBank(entitesList.get(2).getId(), JobBankType.NURSE));
-        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(2).getId(),NURSE_CRITICS));
-        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(2).getId(),NURSE_DIALYSIS));
+        staffExamRepository.save(givenStaffExam(entitesList.get(2).getId(), NURSE_EXAM, false));
+        staffJobBankRepository.save(givenStaffJobBank(entitesList.get(2).getId(), NURSE_JOB_BANK));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(2).getId(),NURSE_CRITICS_SPECIFIC_JOB_BANK));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entitesList.get(2).getId(),NURSE_DIALYSIS_SPECIFIC_JOB_BANK));
 
         //when
         Set<StaffDto> staffs = staffService.getStaffs("name3", "surname3", null);
@@ -277,10 +272,10 @@ public class StaffServiceIntegrationTest {
                         .build()
         );
 
-        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, false));
-        staffJobBankRepository.save(givenStaffJobBank(entity.getId(), TCAE));
-        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(),NURSE_CRITICS));
-        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(),NURSE_DIALYSIS));
+        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE_EXAM, false));
+        staffJobBankRepository.save(givenStaffJobBank(entity.getId(), TCAE_JOB_BANK));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(),NURSE_CRITICS_SPECIFIC_JOB_BANK));
+        staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(),NURSE_DIALYSIS_SPECIFIC_JOB_BANK));
 
         //when
         EnrichedStaffDto staff = staffService.getStaffById(entity.getId());
@@ -308,8 +303,8 @@ public class StaffServiceIntegrationTest {
                         .build()
         );
 
-        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, true));
-        staffExamRepository.save(givenStaffExam(entity.getId(), StaffExamType.TCAE, false));
+        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE_EXAM, true));
+        staffExamRepository.save(givenStaffExam(entity.getId(), TCAE_EXAM, false));
 
         //when
         List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithExams");
@@ -323,9 +318,9 @@ public class StaffServiceIntegrationTest {
         assertThat(staffs.getFirst().dni()).isEqualTo(entity.getDni());
         assertThat(staffs.getFirst().exams()).hasSize(2);
         assertThat(staffs.getFirst().exams().getFirst().provisional()).isTrue();
-        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE);
+        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE_EXAM);
         assertThat(staffs.getFirst().exams().get(1).provisional()).isFalse();
-        assertThat(staffs.getFirst().exams().get(1).type()).isEqualTo(StaffExamType.TCAE);
+        assertThat(staffs.getFirst().exams().get(1).type()).isEqualTo(TCAE_EXAM);
     }
 
     @Test
@@ -339,7 +334,7 @@ public class StaffServiceIntegrationTest {
                         .type(StaffType.NURSE)
                         .build()
         );
-        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, true));
+        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE_EXAM, true));
 
         //when
         List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithProvisionalExam");
@@ -353,7 +348,7 @@ public class StaffServiceIntegrationTest {
         assertThat(staffs.getFirst().dni()).isEqualTo(entity.getDni());
         assertThat(staffs.getFirst().exams()).hasSize(1);
         assertThat(staffs.getFirst().exams().getFirst().provisional()).isTrue();
-        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE);
+        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE_EXAM);
     }
 
     @Test
@@ -367,7 +362,7 @@ public class StaffServiceIntegrationTest {
                         .type(StaffType.NURSE)
                         .build()
         );
-        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE, false));
+        staffExamRepository.save(givenStaffExam(entity.getId(), NURSE_EXAM, false));
 
         //when
         List<EnrichedStaffExamDto> staffs = staffService.getEnrichedStaffExam("staffWithDefinitiveExam");
@@ -381,7 +376,7 @@ public class StaffServiceIntegrationTest {
         assertThat(staffs.getFirst().dni()).isEqualTo(entity.getDni());
         assertThat(staffs.getFirst().exams()).hasSize(1);
         assertThat(staffs.getFirst().exams().getFirst().provisional()).isFalse();
-        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE);
+        assertThat(staffs.getFirst().exams().getFirst().type()).isEqualTo(NURSE_EXAM);
     }
 
     @Test
@@ -395,10 +390,10 @@ public class StaffServiceIntegrationTest {
                         .type(StaffType.NURSE)
                         .build()
         );
-        var staffJobBankEntity = staffJobBankRepository.save(givenStaffJobBank(entity.getId(), TCAE));
+        var staffJobBankEntity = staffJobBankRepository.save(givenStaffJobBank(entity.getId(), TCAE_JOB_BANK));
 
         //when
-        Set<EnrichedStaffJobBankDto> staffs = staffService.getEnrichedStaffJobBank("staffWithJobBank", TCAE);
+        Set<EnrichedStaffJobBankDto> staffs = staffService.getEnrichedStaffJobBank("staffWithJobBank", TCAE_JOB_BANK);
 
         //then
         assertThat(staffs).isNotNull();
@@ -433,12 +428,12 @@ public class StaffServiceIntegrationTest {
                         .type(StaffType.NURSE)
                         .build()
         );
-        var staffJobBankEntity = staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(), NURSE_CRITICS));
+        var staffJobBankEntity = staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(), NURSE_CRITICS_SPECIFIC_JOB_BANK));
 
         //when
         Set<EnrichedSpecificStaffJobBankDto> staffs = staffService.getEnrichedSpecificStaffJobBank(
                 "staffWithSpecificJobBank",
-                NURSE_CRITICS
+                NURSE_CRITICS_SPECIFIC_JOB_BANK
         );
 
         //then
@@ -464,7 +459,7 @@ public class StaffServiceIntegrationTest {
         assertThat(enrichedStaffJobBankDto.staffJobBank().experience()).isEqualTo(staffJobBankEntity.getExperience());
     }
 
-    private StaffExamEntity givenStaffExam(Long staffId, StaffExamType type, boolean provisional) {
+    private StaffExamEntity givenStaffExam(Long staffId, SasSubType type, boolean provisional) {
         return StaffExamEntity
                 .builder()
                 .staffId(staffId)
@@ -474,7 +469,7 @@ public class StaffServiceIntegrationTest {
                 .build();
     }
 
-    private StaffJobBankEntity givenStaffJobBank(Long staffId, JobBankType type) {
+    private StaffJobBankEntity givenStaffJobBank(Long staffId, SasSubType type) {
         return StaffJobBankEntity
                 .builder()
                 .staffId(staffId)
@@ -483,7 +478,7 @@ public class StaffServiceIntegrationTest {
                 .build();
     }
 
-    private StaffSpecificJobBankEntity givenStaffSpecificJobBank(Long staffId, SpecificJobBankType type) {
+    private StaffSpecificJobBankEntity givenStaffSpecificJobBank(Long staffId, SasSubType type) {
         return StaffSpecificJobBankEntity
                 .builder()
                 .staffId(staffId)

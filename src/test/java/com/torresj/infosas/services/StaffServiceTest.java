@@ -12,9 +12,7 @@ import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.entities.StaffExamEntity;
 import com.torresj.infosas.entities.StaffJobBankEntity;
 import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
-import com.torresj.infosas.enums.JobBankType;
-import com.torresj.infosas.enums.SpecificJobBankType;
-import com.torresj.infosas.enums.StaffExamType;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.mappers.StaffMapper;
@@ -34,10 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.torresj.infosas.enums.JobBankType.TCAE;
-import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_CRITICS;
-import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_DIALYSIS;
-import static com.torresj.infosas.enums.StaffExamType.NURSE;
+import static com.torresj.infosas.enums.SasSubType.*;
 import static com.torresj.infosas.enums.Status.ADMITIDA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -165,11 +160,11 @@ public class StaffServiceTest {
         when(staffRepository.findAllBySurnameContainingIgnoreCase("name", Limit.of(100)))
                 .thenReturn(Set.of(staffEntity));
         when(staffExamRepository.findByStaffId(staffEntity.getId()))
-                .thenReturn(List.of(getStaffExamEntity(staffEntity.getId(), NURSE, true)));
+                .thenReturn(List.of(getStaffExamEntity(staffEntity.getId(), NURSE_EXAM, true)));
         when(staffSpecificJobBankRepository.findByStaffId(staffEntity.getId()))
-                .thenReturn(Set.of(getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_DIALYSIS)));
+                .thenReturn(Set.of(getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_DIALYSIS_SPECIFIC_JOB_BANK)));
         when(staffJobBankRepository.findByStaffId(staffEntity.getId()))
-                .thenReturn(Set.of(getStaffJobBankEntity(staffEntity.getId(), TCAE)));
+                .thenReturn(Set.of(getStaffJobBankEntity(staffEntity.getId(), TCAE_JOB_BANK)));
 
         Set<StaffDto> result = staffService.getStaffsBySurname("name");
 
@@ -179,9 +174,9 @@ public class StaffServiceTest {
     @Test
     void givenStaffWithJobBankAndExam_whenGetById_thenReturnStaff() {
         var staffEntity = getStaffEntity(StaffType.NURSE);
-        var staffExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE, true);
-        var staffSpecificJobBankEntity = getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_DIALYSIS);
-        var staffJobBankEntity = getStaffJobBankEntity(staffEntity.getId(), TCAE);
+        var staffExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE_EXAM, true);
+        var staffSpecificJobBankEntity = getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_DIALYSIS_SPECIFIC_JOB_BANK);
+        var staffJobBankEntity = getStaffJobBankEntity(staffEntity.getId(), TCAE_JOB_BANK);
         when(staffRepository.findById(staffEntity.getId())).thenReturn(Optional.of(staffEntity));
         when(staffExamRepository.findByStaffId(staffEntity.getId()))
                 .thenReturn(List.of(staffExamEntity));
@@ -214,8 +209,8 @@ public class StaffServiceTest {
     @Test
     void givenStaffWithExam_whenGetBySurnameAndType_thenStaffsAreReturned() {
         var staffEntity = getStaffEntity(StaffType.NURSE);
-        var staffProvisionalExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE, true);
-        var staffDefinitiveExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE, false);
+        var staffProvisionalExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE_EXAM, true);
+        var staffDefinitiveExamEntity = getStaffExamEntity(staffEntity.getId(), NURSE_EXAM, false);
         var enrichedStaffExample = getEnrichedStaffExamDto(
                 staffEntity,staffProvisionalExamEntity,
                 staffDefinitiveExamEntity
@@ -237,19 +232,19 @@ public class StaffServiceTest {
     @Test
     void givenStaffWithJobBank_whenGetBySurnameAndType_thenReturnStaffsAreReturned() {
         var staffEntity = getStaffEntity(StaffType.NURSE);
-        var staffJobBankEntity = getStaffJobBankEntity(staffEntity.getId(), TCAE);
+        var staffJobBankEntity = getStaffJobBankEntity(staffEntity.getId(), TCAE_JOB_BANK);
         var enrichedStaffExample = getEnrichedStaffJobBankDto(
                 staffEntity,
                 staffJobBankEntity
         );
         when(staffRepository.findAllBySurnameContainingIgnoreCase("name", Limit.of(100)))
                 .thenReturn(Set.of(staffEntity));
-        when(staffJobBankRepository.findByStaffIdAndType(staffEntity.getId(),TCAE))
+        when(staffJobBankRepository.findByStaffIdAndType(staffEntity.getId(),TCAE_JOB_BANK))
                 .thenReturn(staffJobBankEntity);
         when(staffMapper.toEnrichedStaffJobBankDto(staffEntity,staffJobBankEntity))
                 .thenReturn(enrichedStaffExample);
 
-        Set<EnrichedStaffJobBankDto> result = staffService.getEnrichedStaffJobBank("name", TCAE);
+        Set<EnrichedStaffJobBankDto> result = staffService.getEnrichedStaffJobBank("name", TCAE_JOB_BANK);
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
@@ -259,21 +254,21 @@ public class StaffServiceTest {
     @Test
     void givenStaffWithSpecificJobBank_whenGetBySurnameAndType_thenReturnStaffsAreReturned() {
         var staffEntity = getStaffEntity(StaffType.NURSE);
-        var staffSpecificJobBankEntity = getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_CRITICS);
+        var staffSpecificJobBankEntity = getStaffSpecificJobBankEntity(staffEntity.getId(), NURSE_DIALYSIS_SPECIFIC_JOB_BANK);
         var enrichedStaffExample = getEnrichedSpecificStaffJobBankDto(
                 staffEntity,
                 staffSpecificJobBankEntity
         );
         when(staffRepository.findAllBySurnameContainingIgnoreCase("name", Limit.of(100)))
                 .thenReturn(Set.of(staffEntity));
-        when(staffSpecificJobBankRepository.findByStaffIdAndType(staffEntity.getId(),NURSE_CRITICS))
+        when(staffSpecificJobBankRepository.findByStaffIdAndType(staffEntity.getId(),NURSE_DIALYSIS_SPECIFIC_JOB_BANK))
                 .thenReturn(staffSpecificJobBankEntity);
         when(staffMapper.toEnrichedSpecificStaffJobBankDto(staffEntity,staffSpecificJobBankEntity))
                 .thenReturn(enrichedStaffExample);
 
         Set<EnrichedSpecificStaffJobBankDto> result = staffService.getEnrichedSpecificStaffJobBank(
                 "name",
-                NURSE_CRITICS
+                NURSE_DIALYSIS_SPECIFIC_JOB_BANK
         );
 
         assertThat(result).isNotNull();
@@ -292,7 +287,7 @@ public class StaffServiceTest {
                 .build();
     }
 
-    private StaffExamEntity getStaffExamEntity(Long staffId, StaffExamType type, boolean provisional) {
+    private StaffExamEntity getStaffExamEntity(Long staffId, SasSubType type, boolean provisional) {
         return StaffExamEntity
                 .builder()
                 .staffId(staffId)
@@ -301,7 +296,7 @@ public class StaffServiceTest {
                 .build();
     }
 
-    private StaffSpecificJobBankEntity getStaffSpecificJobBankEntity(Long staffId, SpecificJobBankType type) {
+    private StaffSpecificJobBankEntity getStaffSpecificJobBankEntity(Long staffId, SasSubType type) {
         return StaffSpecificJobBankEntity
                 .builder()
                 .staffId(staffId)
@@ -309,7 +304,7 @@ public class StaffServiceTest {
                 .build();
     }
 
-    private StaffJobBankEntity getStaffJobBankEntity(Long staffId, JobBankType type) {
+    private StaffJobBankEntity getStaffJobBankEntity(Long staffId, SasSubType type) {
         return StaffJobBankEntity
                 .builder()
                 .staffId(staffId)
@@ -322,14 +317,14 @@ public class StaffServiceTest {
     }
 
     private StaffExamDto getStaffExamDto() {
-        return new StaffExamDto(NURSE,"L",false,0,0,0,0,2023);
+        return new StaffExamDto(NURSE_EXAM,"L",false,0,0,0,0,2023);
     }
 
     private StaffSpecificJobBankDto getStaffSpecificJobBankDto() {
         return new StaffSpecificJobBankDto(
                 "SI",
                 "L",
-                NURSE_DIALYSIS,
+                NURSE_CRITICS_SPECIFIC_JOB_BANK,
                 ADMITIDA,
                 ADMITIDA,
                 List.of(),
@@ -347,7 +342,7 @@ public class StaffServiceTest {
                 "SI",
                 "L",
                 ADMITIDA,
-                TCAE,
+                TCAE_JOB_BANK,
                 null,
                 "",
                 "",

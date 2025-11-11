@@ -10,9 +10,6 @@ import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.entities.StaffExamEntity;
 import com.torresj.infosas.entities.StaffJobBankEntity;
 import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
-import com.torresj.infosas.enums.JobBankType;
-import com.torresj.infosas.enums.SpecificJobBankType;
-import com.torresj.infosas.enums.StaffExamType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.enums.Status;
 import com.torresj.infosas.repositories.StaffExamRepository;
@@ -31,6 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.torresj.infosas.enums.SasSubType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -74,7 +72,7 @@ public class StaffControllerTest {
                 StaffExamEntity.builder()
                         .staffId(staffEntity.getId())
                         .provisional(true)
-                        .type(StaffExamType.NURSE)
+                        .type(NURSE_EXAM)
                         .op(1)
                         .shift("L")
                         .total(3)
@@ -86,7 +84,7 @@ public class StaffControllerTest {
         staffSpecificJobBankRepository.save(
                 StaffSpecificJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(SpecificJobBankType.NURSE_CRITICS)
+                        .type(NURSE_CRITICS_SPECIFIC_JOB_BANK)
                         .general_admission(Status.EXCLUIDA)
                         .specific_admission(Status.EXCLUIDA)
                         .shift("L")
@@ -102,7 +100,7 @@ public class StaffControllerTest {
         staffJobBankRepository.save(
                 StaffJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(JobBankType.NURSE)
+                        .type(NURSE_EXAM)
                         .status(Status.EXCLUIDA)
                         .shift("L")
                         .exclusionCodes("E21")
@@ -162,7 +160,7 @@ public class StaffControllerTest {
                 StaffExamEntity.builder()
                         .staffId(staffEntity.getId())
                         .provisional(true)
-                        .type(StaffExamType.NURSE)
+                        .type(NURSE_EXAM)
                         .op(1)
                         .shift("L")
                         .total(3)
@@ -174,7 +172,7 @@ public class StaffControllerTest {
         staffSpecificJobBankRepository.save(
                 StaffSpecificJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(SpecificJobBankType.NURSE_CRITICS)
+                        .type(NURSE_CRITICS_SPECIFIC_JOB_BANK)
                         .general_admission(Status.EXCLUIDA)
                         .specific_admission(Status.EXCLUIDA)
                         .shift("L")
@@ -190,7 +188,7 @@ public class StaffControllerTest {
         staffJobBankRepository.save(
                 StaffJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(JobBankType.NURSE)
+                        .type(NURSE_EXAM)
                         .status(Status.EXCLUIDA)
                         .shift("L")
                         .exclusionCodes("E21")
@@ -232,7 +230,7 @@ public class StaffControllerTest {
                 StaffExamEntity.builder()
                         .staffId(staffEntity.getId())
                         .provisional(true)
-                        .type(StaffExamType.NURSE)
+                        .type(NURSE_EXAM)
                         .op(1)
                         .shift("L")
                         .total(3)
@@ -244,7 +242,7 @@ public class StaffControllerTest {
         var staffSpecificJobBankEntity = staffSpecificJobBankRepository.save(
                 StaffSpecificJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(SpecificJobBankType.NURSE_CRITICS)
+                        .type(NURSE_CRITICS_SPECIFIC_JOB_BANK)
                         .general_admission(Status.EXCLUIDA)
                         .specific_admission(Status.EXCLUIDA)
                         .shift("L")
@@ -260,7 +258,7 @@ public class StaffControllerTest {
         var staffJobBankEntity = staffJobBankRepository.save(
                 StaffJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(JobBankType.NURSE)
+                        .type(NURSE_JOB_BANK)
                         .status(Status.EXCLUIDA)
                         .shift("L")
                         .exclusionCodes("E21")
@@ -326,7 +324,7 @@ public class StaffControllerTest {
                 StaffExamEntity.builder()
                         .staffId(staffEntity.getId())
                         .provisional(true)
-                        .type(StaffExamType.NURSE)
+                        .type(NURSE_EXAM)
                         .op(1)
                         .shift("L")
                         .total(3)
@@ -370,7 +368,7 @@ public class StaffControllerTest {
         var staffJobBankEntity = staffJobBankRepository.save(
                 StaffJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(JobBankType.NURSE)
+                        .type(NURSE_JOB_BANK)
                         .status(Status.EXCLUIDA)
                         .shift("L")
                         .exclusionCodes("E21")
@@ -382,7 +380,7 @@ public class StaffControllerTest {
                         .build()
         );
 
-        String url = getBaseUri() + "/jobbanks?filter=TestForJobBanks&type=NURSE";
+        String url = getBaseUri() + "/jobbanks?filter=TestForJobBanks&type=NURSE_JOB_BANK";
 
         var result = restTemplate.getForObject(url, EnrichedStaffJobBankDto[].class);
 
@@ -418,7 +416,7 @@ public class StaffControllerTest {
         var staffJobBankEntity = staffSpecificJobBankRepository.save(
                 StaffSpecificJobBankEntity.builder()
                         .staffId(staffEntity.getId())
-                        .type(SpecificJobBankType.NURSE_CRITICS)
+                        .type(NURSE_CRITICS_SPECIFIC_JOB_BANK)
                         .general_admission(Status.EXCLUIDA)
                         .specific_admission(Status.EXCLUIDA)
                         .shift("L")
@@ -431,7 +429,7 @@ public class StaffControllerTest {
                         .build()
         );
 
-        String url = getBaseUri() + "/specificjobbanks?filter=TestForSpecificJobBanks&type=NURSE_CRITICS";
+        String url = getBaseUri() + "/specificjobbanks?filter=TestForSpecificJobBanks&type=NURSE_CRITICS_SPECIFIC_JOB_BANK";
 
         var result = restTemplate.getForObject(url, EnrichedSpecificStaffJobBankDto[].class);
 

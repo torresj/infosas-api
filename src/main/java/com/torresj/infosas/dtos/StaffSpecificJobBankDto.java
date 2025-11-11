@@ -1,6 +1,6 @@
 package com.torresj.infosas.dtos;
 
-import com.torresj.infosas.enums.SpecificJobBankType;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.Status;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public record StaffSpecificJobBankDto(
         String treaty,
         String shift,
-        SpecificJobBankType type,
+        SasSubType type,
         Status general_admission,
         Status specific_admission,
         List<ExclusionReasonDto> exclusionReasons,

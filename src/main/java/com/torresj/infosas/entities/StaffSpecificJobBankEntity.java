@@ -1,14 +1,8 @@
 package com.torresj.infosas.entities;
 
-import com.torresj.infosas.enums.SpecificJobBankType;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.Status;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,7 +33,8 @@ public class StaffSpecificJobBankEntity {
     private String treaty;
 
     @Column(updatable = false, nullable = false)
-    private SpecificJobBankType type;
+    @Enumerated(EnumType.STRING)
+    private SasSubType type;
 
     @Column(updatable = false)
     private Status general_admission;

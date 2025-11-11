@@ -7,9 +7,8 @@ import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
 import com.torresj.infosas.dtos.QueueMessage;
 import com.torresj.infosas.dtos.StaffDto;
 import com.torresj.infosas.entities.StaffEntity;
-import com.torresj.infosas.enums.JobBankType;
 import com.torresj.infosas.enums.MessageType;
-import com.torresj.infosas.enums.SpecificJobBankType;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.exceptions.StaffNotFoundException;
 import com.torresj.infosas.mappers.StaffMapper;
@@ -152,7 +151,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Set<EnrichedStaffJobBankDto> getEnrichedStaffJobBank(String surname, JobBankType type) {
+    public Set<EnrichedStaffJobBankDto> getEnrichedStaffJobBank(String surname, SasSubType type) {
         return staffRepository.findAllBySurnameContainingIgnoreCase(surname, Limit.of(MAX_NUMBER_OF_STAFFS))
                 .stream()
                 .map(staffEntity -> {
@@ -164,7 +163,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Set<EnrichedSpecificStaffJobBankDto> getEnrichedSpecificStaffJobBank(String surname, SpecificJobBankType type) {
+    public Set<EnrichedSpecificStaffJobBankDto> getEnrichedSpecificStaffJobBank(String surname, SasSubType type) {
         return staffRepository.findAllBySurnameContainingIgnoreCase(surname, Limit.of(MAX_NUMBER_OF_STAFFS))
                 .stream()
                 .map(staffEntity -> {

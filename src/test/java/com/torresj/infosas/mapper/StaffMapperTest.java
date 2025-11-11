@@ -10,15 +10,13 @@ import com.torresj.infosas.entities.StaffEntity;
 import com.torresj.infosas.entities.StaffExamEntity;
 import com.torresj.infosas.entities.StaffJobBankEntity;
 import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
+import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.mappers.StaffMapper;
 import com.torresj.infosas.mappers.StaffMapperImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.torresj.infosas.enums.JobBankType.TCAE;
-import static com.torresj.infosas.enums.SpecificJobBankType.NURSE_DIALYSIS;
-import static com.torresj.infosas.enums.StaffExamType.NURSE;
 import static com.torresj.infosas.enums.Status.ADMITIDA;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +31,7 @@ public class StaffMapperTest {
                 .staffId(1L)
                 .con(1)
                 .position(2)
-                .type(NURSE)
+                .type(SasSubType.NURSE_EXAM)
                 .op(3)
                 .provisional(true)
                 .total(4)
@@ -42,7 +40,7 @@ public class StaffMapperTest {
         StaffExamDto dto = staffMapper.toStaffExamDto(staffExamEntity);
 
         assertThat(dto).isNotNull();
-        assertThat(dto.type()).isEqualTo(NURSE);
+        assertThat(dto.type()).isEqualTo(SasSubType.NURSE_EXAM);
         assertThat(dto.provisional()).isEqualTo(true);
         assertThat(dto.con()).isEqualTo(1);
         assertThat(dto.op()).isEqualTo(3);
@@ -60,7 +58,7 @@ public class StaffMapperTest {
                 .formation("2")
                 .others("3")
                 .status(ADMITIDA)
-                .type(TCAE)
+                .type(SasSubType.TCAE_EXAM)
                 .total("4")
                 .treaty("SI")
                 .shift("L")
@@ -92,7 +90,7 @@ public class StaffMapperTest {
                 .others("3")
                 .specific_admission(ADMITIDA)
                 .general_admission(ADMITIDA)
-                .type(NURSE_DIALYSIS)
+                .type(SasSubType.NURSE_DIALYSIS_SPECIFIC_JOB_BANK)
                 .total("4")
                 .treaty("SI")
                 .shift("L")
@@ -110,7 +108,7 @@ public class StaffMapperTest {
         assertThat(dto.others()).isEqualTo("3");
         assertThat(dto.general_admission()).isEqualTo(ADMITIDA);
         assertThat(dto.specific_admission()).isEqualTo(ADMITIDA);
-        assertThat(dto.type()).isEqualTo(NURSE_DIALYSIS);
+        assertThat(dto.type()).isEqualTo(SasSubType.NURSE_DIALYSIS_SPECIFIC_JOB_BANK);
         assertThat(dto.total()).isEqualTo("4");
         assertThat(dto.treaty()).isEqualTo("SI");
         assertThat(dto.shift()).isEqualTo("L");
