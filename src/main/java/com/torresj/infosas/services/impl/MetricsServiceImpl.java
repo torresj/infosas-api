@@ -23,12 +23,17 @@ public class MetricsServiceImpl implements MetricsService {
 
     @Override
     public MetricsDto getMetrics() {
+        var totalStaff = staffRepository.count();
+        var totalStaffExam = staffExamRepository.count();
+        var totalJobBank = staffJobBankRepository.count();
+        var totalSpecificJobBank = staffSpecificJobBankRepository.count();
         return new MetricsDto(
                 StaffType.values().length,
-                staffRepository.count(),
-                staffExamRepository.count(),
-                staffJobBankRepository.count(),
-                staffSpecificJobBankRepository.count()
+                totalStaff,
+                totalStaffExam,
+                totalJobBank,
+                totalSpecificJobBank,
+                totalJobBank + totalSpecificJobBank
         );
     }
 }

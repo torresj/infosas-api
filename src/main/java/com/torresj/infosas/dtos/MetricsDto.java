@@ -5,6 +5,7 @@ public record MetricsDto(
     long staffs,
     long exams,
     long jobBanks,
-    long specificJobBanks
+    long specificJobBanks,
+    long totalJobBanks
 ) {
 }
