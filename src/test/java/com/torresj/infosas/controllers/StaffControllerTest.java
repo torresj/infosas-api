@@ -64,7 +64,7 @@ public class StaffControllerTest {
                         .name("Jaime")
                         .surname("Torres Benavente")
                         .dni("xxxxxxxxx")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
@@ -112,7 +112,7 @@ public class StaffControllerTest {
                         .build()
         );
 
-        String url = getBaseUri() + "?name=jaime&surname=torres&type=NURSE";
+        String url = getBaseUri() + "?name=jaime&surname=torres&types=NURSE";
 
         var result = restTemplate.getForObject(url, StaffDto[].class);
 
@@ -152,7 +152,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestByDni")
                         .dni("***4567**")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
@@ -222,7 +222,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestById")
                         .dni("xxxxxxxxx")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
@@ -316,7 +316,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestForExams")
                         .dni("xxxxxxxxx")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
@@ -333,7 +333,7 @@ public class StaffControllerTest {
                         .build()
         );
 
-        String url = getBaseUri() + "/exams?filter=TestForExams&type=NURSE";
+        String url = getBaseUri() + "/exams?filter=TestForExams&types=NURSE";
 
         var result = restTemplate.getForObject(url, EnrichedStaffExamDto[].class);
 
@@ -361,7 +361,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestForJobBanks")
                         .dni("xxxxxxxxx")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
@@ -409,7 +409,7 @@ public class StaffControllerTest {
                         .name("Test")
                         .surname("TestForSpecificJobBanks")
                         .dni("xxxxxxxxx")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 

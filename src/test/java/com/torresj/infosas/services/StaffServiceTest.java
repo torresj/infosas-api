@@ -80,21 +80,21 @@ public class StaffServiceTest {
                                 .name("name")
                                 .surname("surname")
                                 .dni("xxxxxx")
-                                .type(StaffType.NURSE)
+                                .types(List.of(StaffType.NURSE))
                                 .build(),
                         StaffEntity.builder()
                                 .id(1L)
                                 .name("name2")
                                 .surname("surname2")
                                 .dni("xxxxxx")
-                                .type(StaffType.NURSE)
+                                .types(List.of(StaffType.NURSE))
                                 .build(),
                         StaffEntity.builder()
                                 .id(1L)
                                 .name("name")
                                 .surname("surname")
                                 .dni("xxxxxx")
-                                .type(StaffType.FISIO)
+                                .types(List.of(StaffType.FISIO))
                                 .build()
                 ));
 
@@ -105,21 +105,21 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffs_whenGetAllWithTypeAndSurname_thenReturnListOfStaff() {
-        when(staffRepository.findAllBySurnameContainingIgnoreCaseAndType("surname", StaffType.NURSE, Limit.of(100)))
+        when(staffRepository.findAllBySurnameContainingIgnoreCaseAndTypesContaining("surname", StaffType.NURSE, Limit.of(100)))
                 .thenReturn(Set.of(
                         StaffEntity.builder()
                                 .id(1L)
                                 .name("name")
                                 .surname("surname")
                                 .dni("xxxxxx")
-                                .type(StaffType.NURSE)
+                                .types(List.of(StaffType.NURSE))
                                 .build(),
                         StaffEntity.builder()
                                 .id(1L)
                                 .name("name2")
                                 .surname("surname2")
                                 .dni("xxxxxx")
-                                .type(StaffType.NURSE)
+                                .types(List.of(StaffType.NURSE))
                                 .build()
                 ));
 
@@ -130,21 +130,21 @@ public class StaffServiceTest {
 
     @Test
     void givenStaffs_whenGetAllWithNameAndTypeAndSurname_thenReturnListOfStaff() {
-        when(staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType("name","surname", StaffType.NURSE, Limit.of(100)))
+        when(staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndTypesContaining("name","surname", StaffType.NURSE, Limit.of(100)))
                 .thenReturn(Set.of(
                         StaffEntity.builder()
                                 .id(1L)
                                 .name("name")
                                 .surname("surname")
                                 .dni("xxxxxx")
-                                .type(StaffType.NURSE)
+                                .types(List.of(StaffType.NURSE))
                                 .build(),
                         StaffEntity.builder()
                                 .id(1L)
                                 .name("name2")
                                 .surname("surname2")
                                 .dni("xxxxxx")
-                                .type(StaffType.NURSE)
+                                .types(List.of(StaffType.NURSE))
                                 .build()
                 ));
 
@@ -283,7 +283,7 @@ public class StaffServiceTest {
                 .dni("dni")
                 .name("name1")
                 .surname("surname1")
-                .type(staffType)
+                .types(List.of(staffType))
                 .build();
     }
 
@@ -313,7 +313,7 @@ public class StaffServiceTest {
     }
 
     private StaffDto getStaffDto(int exams, int jobBanks, int specialJobBanks) {
-        return new StaffDto(1L, "name1","surname1","dni", StaffType.NURSE, exams, jobBanks, specialJobBanks);
+        return new StaffDto(1L, "name1","surname1","dni", List.of(StaffType.NURSE), exams, jobBanks, specialJobBanks);
     }
 
     private StaffExamDto getStaffExamDto() {

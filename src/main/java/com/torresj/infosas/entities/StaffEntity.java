@@ -2,19 +2,18 @@ package com.torresj.infosas.entities;
 
 import com.torresj.infosas.enums.StaffType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(indexes = {
-        @Index(columnList = "dni, name, surname, type", unique = true),
+        @Index(columnList = "surname, name, dni"),
         @Index(columnList = "name, surname"),
-        @Index(columnList = "name, surname, type"),
+        @Index(columnList = "surname"),
         @Index(columnList = "dni")
 })
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
@@ -33,7 +32,8 @@ public class StaffEntity {
     @Column(updatable = false, nullable = false)
     private String surname;
 
-    @Column(updatable = false, nullable = false)
+    @Column
+    @ElementCollection(targetClass = StaffType.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private StaffType type;
+    private List<StaffType> types;
 }

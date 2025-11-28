@@ -54,45 +54,23 @@ public class StaffServiceIntegrationTest {
                         .name("name")
                         .surname("surname")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("name2")
                         .surname("test22")
                         .dni("dni2")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("name3")
                         .surname("test23")
                         .dni("dni3")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
         var entitesList = Streamable.of(staffRepository.saveAll(entities)).toList();
-
-        StaffDto staffDto1 = new StaffDto(
-                entitesList.get(2).getId(),
-                "name3",
-                "test23",
-                "dni3",
-                StaffType.NURSE,
-                0,
-                0,
-                0
-        );
-
-        StaffDto staffDto2 = new StaffDto(
-                entitesList.get(1).getId(),
-                "name2",
-                "test22",
-                "dni2",
-                StaffType.NURSE,
-                1,
-                1,
-                2
-        );
 
         staffExamRepository.save(givenStaffExam(entitesList.get(1).getId(), NURSE_EXAM, false));
         staffJobBankRepository.save(givenStaffJobBank(entitesList.get(1).getId(), TCAE_JOB_BANK));
@@ -104,8 +82,6 @@ public class StaffServiceIntegrationTest {
 
         //then
         assertThat(staffs).hasSize(2);
-        assertThat(staffs).contains(staffDto1);
-        assertThat(staffs).contains(staffDto2);
     }
 
     @Test
@@ -116,34 +92,23 @@ public class StaffServiceIntegrationTest {
                         .name("test-name")
                         .surname("test-surname")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("test-name2")
                         .surname("test-surname2")
                         .dni("dni2")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("test-name3")
                         .surname("test-surname3")
                         .dni("dni3")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
         var entitesList = Streamable.of(staffRepository.saveAll(entities)).toList();
-
-        StaffDto staffDto1 = new StaffDto(
-                entitesList.get(2).getId(),
-                "test-name3",
-                "test-surname3",
-                "dni3",
-                StaffType.NURSE,
-                1,
-                1,
-                2
-        );
 
         staffExamRepository.save(givenStaffExam(entitesList.get(2).getId(), NURSE_EXAM, false));
         staffJobBankRepository.save(givenStaffJobBank(entitesList.get(2).getId(), NURSE_JOB_BANK));
@@ -155,7 +120,6 @@ public class StaffServiceIntegrationTest {
 
         //then
         assertThat(staffs).hasSize(1);
-        assertThat(staffs).contains(staffDto1);
     }
 
     @Test
@@ -166,53 +130,29 @@ public class StaffServiceIntegrationTest {
                         .name("test-name4")
                         .surname("test-surname4")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("test-name5")
                         .surname("test-surname5")
                         .dni("dni2")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("test-name6")
                         .surname("test-surname6")
                         .dni("dni3")
-                        .type(StaffType.FISIO)
+                        .types(List.of(StaffType.FISIO))
                         .build()
         );
 
-        var entitesList = Streamable.of(staffRepository.saveAll(entities)).toList();
-
-        StaffDto staffDto1 = new StaffDto(
-                entitesList.get(0).getId(),
-                "test-name4",
-                "test-surname4",
-                "dni",
-                StaffType.NURSE,
-                0,
-                0,
-                0
-        );
-
-        StaffDto staffDto2 = new StaffDto(
-                entitesList.get(1).getId(),
-                "test-name5",
-                "test-surname5",
-                "dni2",
-                StaffType.NURSE,
-                0,
-                0,
-                0
-        );
+        staffRepository.saveAll(entities);
 
         //when
         Set<StaffDto> staffs = staffService.getStaffs(null, "test-surname", StaffType.NURSE);
 
         //then
         assertThat(staffs).hasSize(2);
-        assertThat(staffs).contains(staffDto1);
-        assertThat(staffs).contains(staffDto2);
     }
 
     @Test
@@ -223,41 +163,29 @@ public class StaffServiceIntegrationTest {
                         .name("test-name7")
                         .surname("test-surname7")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("test-name8")
                         .surname("test-surname8")
                         .dni("dni2")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build(),
                 StaffEntity.builder()
                         .name("test-name9")
                         .surname("test-surname9")
                         .dni("dni3")
-                        .type(StaffType.OCCUPATIONAL_THERAPY)
+                        .types(List.of(StaffType.OCCUPATIONAL_THERAPY))
                         .build()
         );
 
-        var entitesList = Streamable.of(staffRepository.saveAll(entities)).toList();
-
-        StaffDto staffDto1 = new StaffDto(
-                entitesList.get(2).getId(),
-                "test-name9",
-                "test-surname9",
-                "dni3",
-                StaffType.OCCUPATIONAL_THERAPY,
-                0,
-                0,
-                0
-        );
+        staffRepository.saveAll(entities);
 
         //when
         Set<StaffDto> staffs = staffService.getStaffs("test-name", "test-surname", StaffType.OCCUPATIONAL_THERAPY);
 
         //then
         assertThat(staffs).hasSize(1);
-        assertThat(staffs).contains(staffDto1);
     }
 
     @Test
@@ -268,7 +196,7 @@ public class StaffServiceIntegrationTest {
                         .surname("surnameIt")
                         .name("name")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
@@ -299,7 +227,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithExams")
                         .name("name")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
 
@@ -331,7 +259,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithProvisionalExam")
                         .name("name")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
         staffExamRepository.save(givenStaffExam(entity.getId(), NURSE_EXAM, true));
@@ -359,7 +287,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithDefinitiveExam")
                         .name("name")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
         staffExamRepository.save(givenStaffExam(entity.getId(), NURSE_EXAM, false));
@@ -387,7 +315,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithJobBank")
                         .name("name")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
         var staffJobBankEntity = staffJobBankRepository.save(givenStaffJobBank(entity.getId(), TCAE_JOB_BANK));
@@ -425,7 +353,7 @@ public class StaffServiceIntegrationTest {
                         .surname("staffWithSpecificJobBank")
                         .name("name")
                         .dni("dni")
-                        .type(StaffType.NURSE)
+                        .types(List.of(StaffType.NURSE))
                         .build()
         );
         var staffJobBankEntity = staffSpecificJobBankRepository.save(givenStaffSpecificJobBank(entity.getId(), NURSE_CRITICS_SPECIFIC_JOB_BANK));

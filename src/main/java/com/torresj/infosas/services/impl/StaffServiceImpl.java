@@ -99,7 +99,7 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         } else if(isBlank(name) && type != null) {
-            staffs = staffRepository.findAllBySurnameContainingIgnoreCaseAndType(surname.trim(), type, Limit.of(MAX_NUMBER_OF_STAFFS))
+            staffs = staffRepository.findAllBySurnameContainingIgnoreCaseAndTypesContaining(surname.trim(), type, Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -109,7 +109,7 @@ public class StaffServiceImpl implements StaffService {
                     })
                     .collect(Collectors.toSet());
         } else {
-            staffs = staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndType(name.trim(), surname.trim(), type,  Limit.of(MAX_NUMBER_OF_STAFFS))
+            staffs = staffRepository.findAllByNameContainingIgnoreCaseAndSurnameContainingIgnoreCaseAndTypesContaining(name.trim(), surname.trim(), type,  Limit.of(MAX_NUMBER_OF_STAFFS))
                     .stream()
                     .map(entity -> {
                         int exams = staffExamRepository.findByStaffId(entity.getId()).size();
@@ -180,7 +180,7 @@ public class StaffServiceImpl implements StaffService {
                 staffEntity.getName(),
                 staffEntity.getSurname(),
                 staffEntity.getDni(),
-                staffEntity.getType(),
+                staffEntity.getTypes(),
                 exams,
                 jobBanks,
                 specificJobBanks
