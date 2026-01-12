@@ -27,4 +27,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(e.toString());
         return problemDetail;
     }
+
+    @ExceptionHandler(InfoSasAuthenticationException.class)
+    ProblemDetail handleInfoSasAuthenticationException(InfoSasAuthenticationException e) {
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
+        problemDetail.setTitle(e.getMessage());
+        log.error(e.toString());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    ProblemDetail handleClientNotFoundExceptionException(ClientNotFoundException e) {
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle(e.getMessage());
+        log.error(e.toString());
+        return problemDetail;
+    }
 }

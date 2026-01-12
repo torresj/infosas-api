@@ -6,23 +6,24 @@ import com.torresj.infosas.dtos.EnrichedStaffExamDto;
 import com.torresj.infosas.dtos.EnrichedStaffJobBankDto;
 import com.torresj.infosas.dtos.ExclusionReasons;
 import com.torresj.infosas.dtos.StaffDto;
-import com.torresj.infosas.entities.StaffEntity;
-import com.torresj.infosas.entities.StaffExamEntity;
-import com.torresj.infosas.entities.StaffJobBankEntity;
-import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
+import com.torresj.infosas.entities.staff.StaffEntity;
+import com.torresj.infosas.entities.staff.StaffExamEntity;
+import com.torresj.infosas.entities.staff.StaffJobBankEntity;
+import com.torresj.infosas.entities.staff.StaffSpecificJobBankEntity;
 import com.torresj.infosas.enums.StaffType;
 import com.torresj.infosas.enums.Status;
-import com.torresj.infosas.repositories.StaffExamRepository;
-import com.torresj.infosas.repositories.StaffJobBankRepository;
-import com.torresj.infosas.repositories.StaffRepository;
-import com.torresj.infosas.repositories.StaffSpecificJobBankRepository;
+import com.torresj.infosas.repositories.staff.StaffExamRepository;
+import com.torresj.infosas.repositories.staff.StaffJobBankRepository;
+import com.torresj.infosas.repositories.staff.StaffRepository;
+import com.torresj.infosas.repositories.staff.StaffSpecificJobBankRepository;
+import com.torresj.infosas.services.JwtService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
@@ -51,6 +52,9 @@ public class StaffControllerTest {
 
     @Autowired
     private StaffSpecificJobBankRepository staffSpecificJobBankRepository;
+
+    @Autowired
+    private JwtService jwtService;
 
     private String getBaseUri() {
         return "http://localhost:" + port + "/v1/staff";
@@ -114,7 +118,8 @@ public class StaffControllerTest {
 
         String url = getBaseUri() + "?name=jaime&surname=torres&types=NURSE";
 
-        var result = restTemplate.getForObject(url, StaffDto[].class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), StaffDto[].class);
+        var result = request.getBody();
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
@@ -130,18 +135,18 @@ public class StaffControllerTest {
     void givenARequestWithDniAndSurnameThenAnErrorIsReturned(){
         String url = getBaseUri() + "?dni=12345678A&surname=torres";
 
-        var result = restTemplate.getForEntity(url, String.class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), String.class);
 
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST,result.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,request.getStatusCode());
     }
 
     @Test
     void givenARequestWithNoDniAndNoSurnameThenAnErrorIsReturned(){
         String url = getBaseUri();
 
-        var result = restTemplate.getForEntity(url, String.class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), String.class);
 
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST,result.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,request.getStatusCode());
     }
 
     @Test
@@ -202,7 +207,8 @@ public class StaffControllerTest {
 
         String url = getBaseUri() + "?dni=12345678A";
 
-        var result = restTemplate.getForObject(url, StaffDto[].class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), StaffDto[].class);
+        var result = request.getBody();
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
@@ -272,7 +278,8 @@ public class StaffControllerTest {
 
         String url = getBaseUri() + "/" + staffEntity.getId();
 
-        var result = restTemplate.getForObject(url, EnrichedStaffDto.class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), EnrichedStaffDto.class);
+        var result = request.getBody();
 
         assertThat(result).isNotNull();
         assertThat(result.name()).isEqualTo(staffEntity.getName());
@@ -335,7 +342,9 @@ public class StaffControllerTest {
 
         String url = getBaseUri() + "/exams?filter=TestForExams&types=NURSE";
 
-        var result = restTemplate.getForObject(url, EnrichedStaffExamDto[].class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), EnrichedStaffExamDto[].class);
+        var result = request.getBody();
+
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
@@ -382,7 +391,8 @@ public class StaffControllerTest {
 
         String url = getBaseUri() + "/jobbanks?filter=TestForJobBanks&type=NURSE_JOB_BANK";
 
-        var result = restTemplate.getForObject(url, EnrichedStaffJobBankDto[].class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), EnrichedStaffJobBankDto[].class);
+        var result = request.getBody();
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
@@ -431,7 +441,9 @@ public class StaffControllerTest {
 
         String url = getBaseUri() + "/specificjobbanks?filter=TestForSpecificJobBanks&type=NURSE_CRITICS_SPECIFIC_JOB_BANK";
 
-        var result = restTemplate.getForObject(url, EnrichedSpecificStaffJobBankDto[].class);
+        var request = restTemplate.exchange(url, HttpMethod.GET, getHeaders(), EnrichedSpecificStaffJobBankDto[].class);
+        var result = request.getBody();
+
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
@@ -449,5 +461,13 @@ public class StaffControllerTest {
         assertThat(Arrays.stream(result).findFirst().get().staffJobBank().others()).isEqualTo(staffJobBankEntity.getOthers());
         assertThat(Arrays.stream(result).findFirst().get().staffJobBank().total()).isEqualTo(staffJobBankEntity.getTotal());
         assertThat(Arrays.stream(result).findFirst().get().staffJobBank().exclusionReasons()).isEqualTo(List.of(ExclusionReasons.getExclusionReason(staffJobBankEntity.getExclusionCodes())));
+    }
+
+    private HttpEntity<Void> getHeaders(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(jwtService.createJWS("admin")); // adds: Authorization: Bearer <token>
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        return new HttpEntity<>(headers);
     }
 }

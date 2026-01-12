@@ -1,6 +1,6 @@
-package com.torresj.infosas.repositories;
+package com.torresj.infosas.repositories.staff;
 
-import com.torresj.infosas.entities.StaffJobBankEntity;
+import com.torresj.infosas.entities.staff.StaffJobBankEntity;
 import com.torresj.infosas.enums.SasSubType;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

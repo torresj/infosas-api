@@ -1,6 +1,6 @@
-package com.torresj.infosas.repositories;
+package com.torresj.infosas.repositories.staff;
 
-import com.torresj.infosas.entities.StaffEntity;
+import com.torresj.infosas.entities.staff.StaffEntity;
 import com.torresj.infosas.enums.StaffType;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.repository.CrudRepository;

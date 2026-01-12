@@ -7,10 +7,10 @@ import com.torresj.infosas.dtos.ExclusionReasons;
 import com.torresj.infosas.dtos.StaffExamDto;
 import com.torresj.infosas.dtos.StaffJobBankDto;
 import com.torresj.infosas.dtos.StaffSpecificJobBankDto;
-import com.torresj.infosas.entities.StaffEntity;
-import com.torresj.infosas.entities.StaffExamEntity;
-import com.torresj.infosas.entities.StaffJobBankEntity;
-import com.torresj.infosas.entities.StaffSpecificJobBankEntity;
+import com.torresj.infosas.entities.staff.StaffEntity;
+import com.torresj.infosas.entities.staff.StaffExamEntity;
+import com.torresj.infosas.entities.staff.StaffJobBankEntity;
+import com.torresj.infosas.entities.staff.StaffSpecificJobBankEntity;
 import org.mapstruct.Mapper;
 
 import java.util.Arrays;

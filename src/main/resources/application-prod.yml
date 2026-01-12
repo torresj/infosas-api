@@ -1,10 +1,18 @@
 # Maria DB config
 spring:
   datasource:
-    url: jdbc:mariadb://infosas-db-secondary:3306/${DB_NAME}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver
+    primary:
+      url: jdbc:mariadb://infosas-db-primary:3306/${DB_NAME}
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
+      driver-class-name: org.mariadb.jdbc.Driver
+
+    secundary:
+      url: jdbc:mariadb://infosas-db-secondary:3306/${DB_NAME}
+      username: ${DB_USER}
+      password: ${DB_PASSWORD}
+      driver-class-name: org.mariadb.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -29,6 +37,20 @@ telegram:
 #Loggin
 logging:
   config: classpath:logback-spring-prod.xml
+
+#JWT config
+jwt:
+  token:
+    secret: ${JWT_TOKEN_SECRET}
+    expiration: ${JWT_TOKEN_EXPIRATION}
+    prefix: Bearer
+    issuer:
+      info: infosas-api
+
+# Admin credentials
+admin:
+  id: ${ADMIN_ID}
+  password: ${ADMIN_PASSWORD}
 
 management:
   endpoints:

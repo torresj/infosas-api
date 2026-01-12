@@ -1,4 +1,4 @@
-package com.torresj.infosas.entities;
+package com.torresj.infosas.entities.staff;
 
 import com.torresj.infosas.enums.SasSubType;
 import com.torresj.infosas.enums.Status;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class StaffJobBankEntity {
+public class StaffSpecificJobBankEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(updatable = false)
@@ -32,12 +32,15 @@ public class StaffJobBankEntity {
     @Column(updatable = false)
     private String treaty;
 
-    @Column(updatable = false)
-    private Status status;
-
     @Column(updatable = false, nullable = false)
     @Enumerated(EnumType.STRING)
     private SasSubType type;
+
+    @Column(updatable = false)
+    private Status general_admission;
+
+    @Column(updatable = false)
+    private Status specific_admission;
 
     @Column(updatable = false)
     private String exclusionCodes;

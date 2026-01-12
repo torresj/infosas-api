@@ -1,7 +1,6 @@
-package com.torresj.infosas.entities;
+package com.torresj.infosas.entities.staff;
 
 import com.torresj.infosas.enums.SasSubType;
-import com.torresj.infosas.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,13 +10,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(indexes = {
         @Index(columnList = "staffId"),
-        @Index(columnList = "staffId, type, cutOffYear", unique = true)
+        @Index(columnList = "staffId, type, examYear", unique = true)
 })
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class StaffSpecificJobBankEntity {
+public class StaffExamEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(updatable = false)
@@ -29,37 +28,25 @@ public class StaffSpecificJobBankEntity {
     @Column(updatable = false, nullable = false)
     private String shift;
 
-    @Column(updatable = false)
-    private String treaty;
-
     @Column(updatable = false, nullable = false)
     @Enumerated(EnumType.STRING)
     private SasSubType type;
 
     @Column(updatable = false)
-    private Status general_admission;
+    private float total;
 
     @Column(updatable = false)
-    private Status specific_admission;
+    private float op;
 
     @Column(updatable = false)
-    private String exclusionCodes;
+    private float con;
 
-    @Column(updatable = false)
-    private String experience;
-
-    @Column(updatable = false)
-    private String formation;
-
-    @Column(updatable = false)
-    private String others;
-
-    @Column(updatable = false)
-    private String total;
+    @Column(updatable = false, nullable = false)
+    private int position;
 
     @Column(updatable = false, nullable = false)
     private boolean provisional;
 
     @Column(updatable = false, nullable = false)
-    private int cutOffYear;
+    private int examYear;
 }

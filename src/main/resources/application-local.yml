@@ -18,8 +18,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: test
-    password: test
+    username: RabbitmqSas
+    password: 3jZy38pY6s13eXDqDHFF
 
 # Telegram notification channel
 telegram:
@@ -30,6 +30,20 @@ telegram:
 #Loggin
 logging:
   config: classpath:logback-spring-local.xml
+
+# JWT config
+jwt:
+  token:
+    secret: SecretKeyToGenerateAJSONWebTokens
+    expiration: 600000
+    prefix: Bearer
+    issuer:
+      info: infosas-api
+
+# Admin credentials
+admin:
+  id: 1
+  password: test
 
 management:
   endpoints:

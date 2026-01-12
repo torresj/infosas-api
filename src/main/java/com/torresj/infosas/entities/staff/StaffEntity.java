@@ -1,4 +1,4 @@
-package com.torresj.infosas.entities;
+package com.torresj.infosas.entities.staff;
 
 import com.torresj.infosas.enums.StaffType;
 import jakarta.persistence.*;

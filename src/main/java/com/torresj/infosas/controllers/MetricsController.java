@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,10 @@ public class MetricsController {
                                             mediaType = "application/json",
                                             array = @ArraySchema(schema = @Schema(implementation = MetricsDto.class)))
                             }),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping()
     public ResponseEntity<MetricsDto> getMetrics(){
         log.info("Getting INFOSAS metrics");

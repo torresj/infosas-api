@@ -1,6 +1,6 @@
-package com.torresj.infosas.repositories;
+package com.torresj.infosas.repositories.staff;
 
-import com.torresj.infosas.entities.StaffExamEntity;
+import com.torresj.infosas.entities.staff.StaffExamEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,10 @@ public class StaffController {
                                             mediaType = "application/json",
                                             array = @ArraySchema(schema = @Schema(implementation = StaffDto.class)))
                             }),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping()
     public ResponseEntity<Set<StaffDto>> getStaffWithParams(
             @Parameter(description = "Filter by name") @RequestParam(required = false) String name,
@@ -73,6 +77,7 @@ public class StaffController {
     }
 
     @GetMapping("/{id}")
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(summary = "Get SAS staff by ID")
     @ApiResponses(
             value = {
@@ -85,6 +90,8 @@ public class StaffController {
                                             schema = @Schema(implementation = EnrichedStaffDto.class))
                             }),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             })
     ResponseEntity<EnrichedStaffDto> getStaffById(@Parameter(description = "Staff id") @PathVariable long id)
             throws StaffNotFoundException {
@@ -105,7 +112,10 @@ public class StaffController {
                                             mediaType = "application/json",
                                             array = @ArraySchema(schema = @Schema(implementation = EnrichedStaffExamDto.class)))
                             }),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/exams")
     public ResponseEntity<List<EnrichedStaffExamDto>> getExams(
             @Parameter(description = "Filter by surname") @RequestParam String filter
@@ -127,7 +137,10 @@ public class StaffController {
                                             mediaType = "application/json",
                                             array = @ArraySchema(schema = @Schema(implementation = EnrichedStaffJobBankDto.class)))
                             }),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/jobbanks")
     public ResponseEntity<Set<EnrichedStaffJobBankDto>> getJobBanks(
             @Parameter(description = "Filter by surname") @RequestParam String filter,
@@ -150,7 +163,10 @@ public class StaffController {
                                             mediaType = "application/json",
                                             array = @ArraySchema(schema = @Schema(implementation = EnrichedSpecificStaffJobBankDto.class)))
                             }),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             })
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/specificjobbanks")
     public ResponseEntity<Set<EnrichedSpecificStaffJobBankDto>> getSpecificJobBanks(
             @Parameter(description = "Filter by surname") @RequestParam String filter,

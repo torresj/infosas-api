@@ -3,7 +3,7 @@ logging:
   config: classpath:logback-spring-test.xml
 
 
-  #Rabbitmq
+#Rabbitmq
 spring:
   rabbitmq:
     host: localhost
@@ -16,3 +16,17 @@ telegram:
   notification:
     channel:
       id: 1234
+
+#JWT config
+jwt:
+  token:
+    secret: SecretKeyToGenerateAJSONWebTokens
+    expiration: 600000
+    prefix: Bearer
+    issuer:
+      info: infosas-api
+
+# Admin credentials
+admin:
+  id: 1
+  password: test
